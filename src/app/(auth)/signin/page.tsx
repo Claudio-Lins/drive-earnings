@@ -10,8 +10,9 @@ export default async function SignInPage() {
 
   if (session) redirect("/")
   return (
-    <div className="w-full flex items-center justify-center bg-zinc-950 px-2 min-h-screen py-6">
-      <div className="w-full max-w-sm rounded-lg bg-white px-2 py-6 flex items-center justify-center h-fit flex-col space-y-6">
+    <div className="w-full flex items-center justify-center bg-[url('/bg-uber.jpeg')] px-2 min-h-screen py-6 bg-no-repeat  bg-cover bg-top">
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="w-full max-w-sm rounded-lg backdrop-blur-sm bg-white/60 px-2 py-6 flex items-center justify-center h-fit flex-col space-y-6">
         <header className="flex flex-col items-center justify-center space-y-6">
           <h1 className="text-2xl font-bold">Bem-vindo(a)</h1>
           <p className="text-center w-ful px-4">
