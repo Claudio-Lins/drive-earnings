@@ -44,7 +44,11 @@ export function FormRegister({ className, ...props }: UserLoginFormProps) {
         description: response.message,
       })
     } else {
-      router.push("/auth/login")
+      toast({
+        title: "Usuário criado com sucesso",
+        description: "Você será redirecionado para a página de login.",
+      })
+      router.push("/signin")
     }
 
     setData({
