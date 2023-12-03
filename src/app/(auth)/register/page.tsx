@@ -1,13 +1,8 @@
 import { FormRegister } from "@/components/auth/form-register"
 import { Separator } from "@/components/ui/separator"
-import { auth } from "@/lib/auth"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
 export default async function RegisterPage() {
-  const session = await auth()
-
-  if (session) redirect("/")
   return (
     <div className="w-full flex items-center justify-center bg-zinc-950 px-2 min-h-screen py-6">
       <div className="w-full max-w-sm rounded-lg bg-white px-2 py-6 flex items-center justify-center h-fit flex-col space-y-6">

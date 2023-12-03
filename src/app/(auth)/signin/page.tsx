@@ -1,14 +1,9 @@
 import { FormSignin } from "@/components/auth/form-signin"
 import { GoogleButton } from "@/components/auth/google-button"
 import { Separator } from "@/components/ui/separator"
-import { auth } from "@/lib/auth"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
 export default async function SignInPage() {
-  const session = await auth()
-
-  if (session) redirect("/")
   return (
     <div className="w-full flex items-center justify-center bg-[url('/bg-uber.jpeg')] px-2 min-h-screen py-6 bg-no-repeat  bg-cover bg-top">
       <div className="absolute inset-0 bg-black/50" />

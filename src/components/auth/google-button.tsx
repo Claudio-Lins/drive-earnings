@@ -12,7 +12,7 @@ export function GoogleButton() {
       onClick={() => signIn("google", { callbackUrl: "/" })}
     >
       <GoogleColor className="w-7 h-7" />
-      <span className="font-bold">Entrar com o Google</span>
+      <span className="font-bold">Entrar com o Googlee</span>
     </Button>
   )
 }
