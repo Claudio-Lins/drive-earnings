@@ -23,35 +23,6 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_CLIENT_ID!,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    //   async profile(profile) {
-    //     let user = await prisma.user.findUnique({
-    //       where: { email: profile.email },
-    //     })
-
-    //     if (!user) {
-    //       user = await prisma.user.create({
-    //         data: {
-    //           name: profile.name,
-    //           email: profile.email,
-    //           image: profile.picture,
-    //           role: profile.role ? profile.role : "USER",
-    //           hashedPassword: bcrypt.hashSync("defaultPassword", 10),
-    //         },
-    //       })
-    //     }
-
-    //     return {
-    //       id: user.id,
-    //       name: user.name,
-    //       email: user.email,
-    //       image: user.image,
-    //       role: user.role,
-    //     }
-    //   },
-    // }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -79,6 +50,7 @@ export const authOptions: NextAuthOptions = {
           id: existingUser.id,
           name: existingUser.name,
           email: existingUser.email,
+          image: existingUser.image,
         }
       },
     }),
