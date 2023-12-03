@@ -7,27 +7,51 @@ import prisma from "./prisma"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  secret: process.env.NEXTAUTH_SECRET as string,
+
+  secret: process.env.SECRET,
+
+  jwt: {
+    secret: process.env.SECRET,
+  },
+
   session: {
     strategy: "jwt",
   },
-  pages: {
-    signIn: "/signin",
-  },
+
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-          role: profile.role ? profile.role : "USER",
-        }
-      },
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID!,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    //   async profile(profile) {
+    //     let user = await prisma.user.findUnique({
+    //       where: { email: profile.email },
+    //     })
+
+    //     if (!user) {
+    //       user = await prisma.user.create({
+    //         data: {
+    //           name: profile.name,
+    //           email: profile.email,
+    //           image: profile.picture,
+    //           role: profile.role ? profile.role : "USER",
+    //           hashedPassword: bcrypt.hashSync("defaultPassword", 10),
+    //         },
+    //       })
+    //     }
+
+    //     return {
+    //       id: user.id,
+    //       name: user.name,
+    //       email: user.email,
+    //       image: user.image,
+    //       role: user.role,
+    //     }
+    //   },
+    // }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -58,8 +82,8 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-    // ...add more providers here
   ],
+  debug: process.env.NODE_ENV === "development",
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -77,5 +101,9 @@ export const authOptions: NextAuthOptions = {
         },
       }
     },
+  },
+
+  pages: {
+    signIn: "/signin",
   },
 }

@@ -4,7 +4,7 @@ declare global {
       GOOGLE_API_KEY: string
       GOOGLE_CLIENT_ID: string
       GOOGLE_CLIENT_SECRET: string
-      AUTH_SECRET: string
+      SECRET: string
     }
   }
 }

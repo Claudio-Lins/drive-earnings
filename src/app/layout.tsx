@@ -1,4 +1,6 @@
+import { UserProfile } from "@/components/auth/user-profile"
 import { cn } from "@/lib/utils"
+import { AuthProvider } from "@/providers/auth"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
@@ -18,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("min-h-screen antialiased", inter.className)}>
-        {children}
+        <AuthProvider>
+          <UserProfile />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
