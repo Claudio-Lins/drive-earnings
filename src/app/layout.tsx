@@ -1,4 +1,4 @@
-import { UserProfile } from "@/components/auth/user-profile"
+import { Profile } from "@/components/auth/Profile"
 import { cn } from "@/lib/utils"
 import { AuthProvider } from "@/providers/auth"
 import type { Metadata } from "next"
@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn("min-h-screen antialiased", inter.className)}>
         <AuthProvider>
-          <UserProfile />
+          <Profile />
           {children}
         </AuthProvider>
       </body>

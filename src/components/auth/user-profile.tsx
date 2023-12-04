@@ -6,7 +6,11 @@ export async function UserProfile() {
   const session = await getServerSession(authOptions)
   return (
     <div className="absolute top-4 right-4">
-      {session ? <BtnSignInOut /> : <div>Not logged in</div>}
+      {session ? (
+        <BtnSignInOut />
+      ) : (
+        <div className="text-white">Not logged in</div>
+      )}
     </div>
   )
 }
