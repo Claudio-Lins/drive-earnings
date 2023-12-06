@@ -32,9 +32,8 @@ export function FormSignin() {
       password: values.password,
     })
     if (signInData?.error) {
-      console.log(signInData.error)
+      console.error(signInData.error)
     } else {
-      router.refresh()
       router.push("/")
     }
   }

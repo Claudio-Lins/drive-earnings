@@ -69,6 +69,7 @@ export const authOptions: NextAuthOptions = {
       return {
         ...session,
         user: {
+          id: token.id,
           name: token.name,
           email: token.email,
           image: token.image as string | null | undefined,

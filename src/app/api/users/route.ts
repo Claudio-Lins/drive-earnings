@@ -27,3 +27,13 @@ export async function POST(request: Request) {
 
   return NextResponse.json(user)
 }
+
+export async function GET(request: Request) {
+  try {
+    const users = await prisma.user.findMany()
+    return NextResponse.json(users)
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ message: "Erro ao buscar usuários" })
+  }
+}
