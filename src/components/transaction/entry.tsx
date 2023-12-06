@@ -1,3 +1,4 @@
+"use client"
 import {
   Sheet,
   SheetClose,
@@ -10,11 +11,18 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { PlusCircle, X } from "lucide-react"
+import { useState } from "react"
 import { Separator } from "../ui/separator"
 import FormTransactionExpense from "./form-transaction-expense"
 import FormTransactionIncome from "./form-transaction-income"
 
 export default function Entry() {
+  const [categorias, setCategorias] = useState([])
+  // useEffect(() => {
+  //   fetch("/api/category")
+  //     .then((res) => res.json())
+  //     .then((json) => setCategorias(json))
+  // }, [])
   return (
     <Sheet>
       <SheetTrigger className="-mt-10 rounded-full flex items-center shadow-md bg-white justify-center p-2">

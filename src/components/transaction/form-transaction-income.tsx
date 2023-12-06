@@ -1,9 +1,10 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Category, User } from "@prisma/client"
+import { Category } from "@prisma/client"
 import { useSession } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { toast } from "../ui/use-toast"
@@ -27,7 +28,7 @@ const transactionIncomeFormSchema = z.object({
 
 interface TransactioFormProps {
   categories: Category[]
-  user: User
+  // user: User
 }
 
 type TransactionFormData = z.infer<typeof transactionIncomeFormSchema>
@@ -100,24 +101,10 @@ export default function FormTransactionExpense() {
           />
         </div>
         <div className="flex flex-col items-center justify-center space-y-2 mt-4"></div>
-        {/* <div>
-        <label htmlFor="categories">Categories</label>
-        <select
-          id="categories"
-          {...register("categories")}
-        >
-          <option value="">Select a category</option>
-          {data?.user.categories.map((category: Category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </div> */}
         <div>
-          <button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             Submit
-          </button>
+          </Button>
         </div>
       </form>
     </div>

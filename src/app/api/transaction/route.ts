@@ -18,8 +18,8 @@ export async function POST(request: NextRequest) {
     const transaction = await prisma.transaction.create({
       data: {
         ...body,
-        // categories: {
-        //   connect: body.categories.map((id: number) => ({ id })),
+        // category: {
+        //   connect: { id: body.categoryId },
         // },
       },
     })
