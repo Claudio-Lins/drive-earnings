@@ -6,12 +6,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-
+import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Category } from "@prisma/client"
 import { Tag } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Button } from "../ui/button"
@@ -19,6 +21,7 @@ import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
+import { ToastAction } from "../ui/toast"
 
 const transactionIncomeFormSchema = z.object({
   amount: z.number().positive(),
@@ -40,8 +43,8 @@ interface TransactioFormProps {
   categories: Category[]
   selectedCategory: Category | null
   setSelectedCategory: (category: Category | null) => void
-
-  // user: User
+  setIsFormOpen: (value: boolean) => void
+  isFormOpen: boolean
 }
 
 type TransactionFormData = z.infer<typeof transactionIncomeFormSchema>
@@ -50,19 +53,26 @@ export default function FormTransactionExpense({
   categories,
   setSelectedCategory,
   selectedCategory,
+  setIsFormOpen,
+  isFormOpen,
 }: TransactioFormProps) {
+  const [isSheetOpen, setSheetOpen] = useState(false)
+
+  const { toast } = useToast()
+  const router = useRouter()
   const { data } = useSession()
   const {
     register,
     handleSubmit,
     reset,
-    control,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<TransactionFormData>({
     resolver: zodResolver(transactionIncomeFormSchema),
     defaultValues: {
       type: "INCOME",
       userId: data?.user?.id,
+      categoryId: selectedCategory?.id,
       createdAt: new Date(),
       entity: "COMPANY",
       paymentMethod: "CASH",
@@ -84,13 +94,21 @@ export default function FormTransactionExpense({
         body: JSON.stringify(data),
       })
 
-      if (!response.ok) {
-        const responseBody = await response.json()
-        console.error("Response status:", response.status)
-        console.error("Response body:", responseBody)
+      if (response.ok) {
+        toast({
+          title: "Transação criada com sucesso",
+          description: "Sua transação foi criada com sucesso",
+        })
         reset()
+        setIsFormOpen(false)
       }
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
       console.error(error)
     }
   }
@@ -137,7 +155,7 @@ export default function FormTransactionExpense({
           )}
         </div>
         <div className="flex flex-col items-center justify-center space-y-2 mt-4">
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger className="flex items-center gap-2">
               <Tag className="w-4 h-4 text-white" />
               <span className="text-white">
@@ -146,7 +164,7 @@ export default function FormTransactionExpense({
             </SheetTrigger>
             <SheetContent
               side={"bottom"}
-              className="h-[80vh]  flex flex-col space-y-4"
+              className="h-[80vh]  flex flex-col space-y-4 max-w-md"
             >
               <SheetHeader>
                 <SheetTitle className="text-2xl">Categorias</SheetTitle>
@@ -169,7 +187,11 @@ export default function FormTransactionExpense({
                           id={category.name}
                           value={category.id}
                           {...register("categoryId")}
-                          onChange={() => setSelectedCategory(category)}
+                          onChange={() => {
+                            setSelectedCategory(category)
+                            setValue("categoryId", category.id)
+                            setSheetOpen(false)
+                          }}
                         />
                         <Label
                           className="w-full flex items-center cursor-pointer h-8"

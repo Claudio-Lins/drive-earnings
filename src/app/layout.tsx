@@ -1,5 +1,6 @@
 import { Footer } from "@/components/Footer"
 import { Profile } from "@/components/auth/Profile"
+import { Toaster } from "@/components/ui/toaster"
 import { authOptions } from "@/lib/auth"
 import { cn } from "@/lib/utils"
 import { AuthProvider } from "@/providers/auth"
@@ -30,6 +31,7 @@ export default async function RootLayout({
             <Profile />
             {children}
             <Footer session={session} />
+            <Toaster />
           </main>
         </AuthProvider>
       </body>

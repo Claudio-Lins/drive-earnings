@@ -21,6 +21,7 @@ export default function Entry() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   )
+  const [isFormOpen, setIsFormOpen] = useState(false)
   const [categories, setCategories] = useState([])
   useEffect(() => {
     fetch("/api/category")
@@ -28,7 +29,7 @@ export default function Entry() {
       .then((json) => setCategories(json))
   }, [])
   return (
-    <Sheet>
+    <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
       <SheetTrigger className="-mt-10 rounded-full flex items-center shadow-md bg-white justify-center p-2">
         <PlusCircle className="w-12 h-12 font-medium " />
       </SheetTrigger>
@@ -62,6 +63,8 @@ export default function Entry() {
             <FormTransactionIncome
               setSelectedCategory={setSelectedCategory}
               selectedCategory={selectedCategory}
+              setIsFormOpen={setIsFormOpen}
+              isFormOpen={isFormOpen}
               categories={categories}
             />
           </TabsContent>
