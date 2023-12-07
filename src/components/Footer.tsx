@@ -4,6 +4,7 @@
 // import { Category } from "@/@types"
 // import { UseAccountNav } from "./UseAccountNav"
 import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
 import Entry from "./transaction/entry"
 // import { SignOutBtn } from "./SignOutBtn"
 
@@ -13,13 +14,21 @@ interface FooterProps {
 
 export function Footer({ session }: FooterProps) {
   return (
-    <div
+    <motion.div
+      initial={{ y: 100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, delay: 2.5 }}
       className={cn(
         "fixed bottom-0 bg-white backdrop-blur w-full h-14 rounded-b-xl flex items-center p-2 justify-center",
         !session?.user && "hidden"
       )}
     >
-      <div className="flex items-center justify-evenly px-2 gap-2 w-full max-w-md">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.5, delay: 3 }}
+        className="flex items-center justify-evenly px-2 gap-2 w-full max-w-md"
+      >
         <Entry />
         {/* <button className=" rounded-full flex items-center justify-center p-2 ">
           <Fuel className="w-6 h-6 font-medium " />
@@ -39,7 +48,7 @@ export function Footer({ session }: FooterProps) {
         >
           <PlusCircle className="w-12 h-12 font-medium " />
         </Link> */}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

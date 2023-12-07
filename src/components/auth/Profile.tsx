@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { useState } from "react"
@@ -20,7 +21,10 @@ export function Profile() {
   }
 
   return (
-    <div
+    <motion.div
+      initial={{ x: 100 }}
+      animate={{ x: 0 }}
+      transition={{ duration: 1.5, delay: 1.5 }}
       className={cn(
         "flex z-10 flex-col items-center justify-center absolute top-4 right-4",
         !data && "hidden"
@@ -83,6 +87,6 @@ export function Profile() {
           </div>
         </PopoverContent>
       </Popover>
-    </div>
+    </motion.div>
   )
 }

@@ -4,6 +4,7 @@ import { useSelectedDateStore } from "@/context/selescted-date-store"
 import { cn } from "@/lib/utils"
 import dayjs from "dayjs"
 import weekOfYear from "dayjs/plugin/weekOfYear"
+import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { DayCard } from "./DayCard"
@@ -78,7 +79,12 @@ export function CurrentWeek() {
   }
   return (
     <div className="fixed mx-auto w-full flex flex-col space-y-4 items-center mt-4  bg-transparent text-white">
-      <div className="flex items-center justify-between gap-2 w-56">
+      <motion.div
+        initial={{ y: -200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 1, delay: 1 }}
+        className="flex items-center justify-between gap-2 w-56"
+      >
         <button className="" onClick={handlePreviousMonth}>
           <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-50" />
         </button>
@@ -91,11 +97,14 @@ export function CurrentWeek() {
         <button onClick={handleNextMonth}>
           <ChevronRight className="w-8 h-8 hover:text-zinc-800 text-zinc-50" />
         </button>
-      </div>
+      </motion.div>
       <div className="flex md:flex-row items-center justify-center gap-2 md:gap-6">
         {calendarWeeksofYear[weekNumber].map((week, index) => {
           return (
-            <button
+            <motion.button
+              initial={{ y: -200 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, delay: index * 0.1 }}
               key={index}
               onClick={() =>
                 getSelectedDate(week.format("DD"), week.format("MM"))
@@ -113,11 +122,16 @@ export function CurrentWeek() {
                 day={week.format("DD")}
                 weekDay={week.format("ddd")}
               />
-            </button>
+            </motion.button>
           )
         })}
       </div>
-      <div className="flex items-center justify-between gap-4">
+      <motion.div
+        initial={{ y: -200 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, delay: 0 }}
+        className="flex items-center justify-between gap-4"
+      >
         <button className="" onClick={handlePreviousWeek}>
           <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
         </button>
@@ -125,7 +139,7 @@ export function CurrentWeek() {
         <button onClick={handleNextWeek}>
           <ChevronRight className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
         </button>
-      </div>
+      </motion.div>
     </div>
   )
 }
