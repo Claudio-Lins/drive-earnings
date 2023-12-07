@@ -100,6 +100,7 @@ export default function FormTransactionExpense({
           description: "Sua transação foi criada com sucesso",
         })
         reset()
+        router.refresh()
         setIsFormOpen(false)
       }
     } catch (error) {
