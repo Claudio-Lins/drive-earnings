@@ -22,7 +22,7 @@ export function Profile() {
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center absolute top-4 right-4",
+        "flex z-10 flex-col items-center justify-center absolute top-4 right-4",
         !data && "hidden"
       )}
     >

@@ -2,11 +2,7 @@ import prisma from "@/lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: Request) {
-  const transactions = await prisma.transaction.findMany({
-    include: {
-      categories: true,
-    },
-  })
+  const transactions = await prisma.transaction.findMany()
 
   return NextResponse.json(transactions)
 }

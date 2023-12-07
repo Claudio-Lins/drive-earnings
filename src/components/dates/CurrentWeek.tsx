@@ -77,7 +77,7 @@ export function CurrentWeek() {
     console.log(+dia)
   }
   return (
-    <div className="flex flex-col space-y-4 items-center mt-4">
+    <div className="fixed mx-auto w-full flex flex-col space-y-4 items-center mt-4  bg-transparent text-white">
       <div className="flex items-center justify-between gap-2 w-56">
         <button className="" onClick={handlePreviousMonth}>
           <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-50" />

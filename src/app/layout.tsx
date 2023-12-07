@@ -1,5 +1,6 @@
 import { Footer } from "@/components/Footer"
 import { Profile } from "@/components/auth/Profile"
+import { CurrentWeek } from "@/components/dates/CurrentWeek"
 import { Toaster } from "@/components/ui/toaster"
 import { authOptions } from "@/lib/auth"
 import { cn } from "@/lib/utils"
@@ -25,10 +26,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn("min-h-screen antialiased", inter.className)}>
+      <body className={cn(" antialiased", inter.className)}>
         <AuthProvider>
-          <main>
+          <main className="min-h-screen">
             <Profile />
+            <CurrentWeek />
             {children}
             <Footer session={session} />
             <Toaster />
