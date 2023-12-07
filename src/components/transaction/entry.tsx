@@ -10,19 +10,23 @@ import {
 } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { Category } from "@prisma/client"
 import { PlusCircle, X } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Separator } from "../ui/separator"
 import FormTransactionExpense from "./form-transaction-expense"
 import FormTransactionIncome from "./form-transaction-income"
 
 export default function Entry() {
-  const [categorias, setCategorias] = useState([])
-  // useEffect(() => {
-  //   fetch("/api/category")
-  //     .then((res) => res.json())
-  //     .then((json) => setCategorias(json))
-  // }, [])
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  )
+  const [categories, setCategories] = useState([])
+  useEffect(() => {
+    fetch("/api/category")
+      .then((res) => res.json())
+      .then((json) => setCategories(json))
+  }, [])
   return (
     <Sheet>
       <SheetTrigger className="-mt-10 rounded-full flex items-center shadow-md bg-white justify-center p-2">
@@ -55,7 +59,11 @@ export default function Entry() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="income">
-            <FormTransactionIncome />
+            <FormTransactionIncome
+              setSelectedCategory={setSelectedCategory}
+              selectedCategory={selectedCategory}
+              categories={categories}
+            />
           </TabsContent>
           <TabsContent value="expense">
             <FormTransactionExpense />

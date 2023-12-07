@@ -18,13 +18,12 @@ export async function POST(request: NextRequest) {
     const transaction = await prisma.transaction.create({
       data: {
         ...body,
-        // category: {
-        //   connect: { id: body.categoryId },
-        // },
+        categoryId: body.categoryId,
       },
     })
     return NextResponse.json(transaction, { status: 201 })
   } catch (error) {
+    console.error("Error details:", error)
     return NextResponse.json({ message: "Erro ao criar transação" })
   }
 }

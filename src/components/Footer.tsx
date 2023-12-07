@@ -12,7 +12,6 @@ interface FooterProps {
 }
 
 export function Footer({ session }: FooterProps) {
-  console.log("Server", session)
   return (
     <div
       className={cn(
