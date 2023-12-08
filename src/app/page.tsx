@@ -1,7 +1,11 @@
 import { Summary } from "@/components/transaction/summary"
+import {
+  getTransactionMonth,
+  getTransactionToday,
+  getTransactionWeek,
+} from "@/data/transactionsServices"
 import { authOptions } from "@/lib/auth"
 import prisma from "@/lib/prisma"
-import dayjs from "dayjs"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 
@@ -11,31 +15,9 @@ export default async function Home() {
 
   const transaction = await prisma.transaction.findMany()
 
-  const transactionToday = await prisma?.transaction.findMany({
-    where: {
-      createdAt: {
-        gte: dayjs().startOf("day").toDate(),
-        lte: dayjs().endOf("day").toDate(),
-      },
-    },
-  })
-  const transactionWeek = await prisma?.transaction.findMany({
-    where: {
-      createdAt: {
-        gte: dayjs().startOf("week").toDate(),
-        lte: dayjs().endOf("week").toDate(),
-      },
-    },
-  })
-
-  const transactionMonth = await prisma?.transaction.findMany({
-    where: {
-      createdAt: {
-        gte: dayjs().startOf("month").toDate(),
-        lte: dayjs().endOf("month").toDate(),
-      },
-    },
-  })
+  const transactionToday = await getTransactionToday()
+  const transactionWeek = await getTransactionWeek()
+  const transactionMonth = await getTransactionMonth()
 
   const totalAmount = {
     todayIncome: transactionToday

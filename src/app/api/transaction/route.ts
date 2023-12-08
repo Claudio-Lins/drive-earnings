@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import dayjs from "dayjs"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: Request) {
@@ -11,11 +12,9 @@ export async function POST(request: NextRequest) {
   const body = await request.json()
 
   try {
-    const startOfDay = new Date(body.createdAt)
-    startOfDay.setHours(0, 0, 0, 0)
+    const startOfDay = dayjs(body.createdAt).startOf("day").toDate()
 
-    const endOfDay = new Date(body.createdAt)
-    endOfDay.setHours(23, 59, 59, 999)
+    const endOfDay = dayjs(body.createdAt).endOf("day").toDate()
 
     const transactionsOfDay = await prisma.transaction.findMany({
       where: {
@@ -27,7 +26,9 @@ export async function POST(request: NextRequest) {
     })
 
     const existingTransaction = transactionsOfDay.find(
-      (transaction) => transaction.categoryId === body.categoryId
+      (transaction) =>
+        transaction.categoryId === body.categoryId &&
+        transaction.type === body.type
     )
 
     if (existingTransaction) {
