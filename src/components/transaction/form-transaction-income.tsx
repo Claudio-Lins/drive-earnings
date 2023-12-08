@@ -22,6 +22,7 @@ import { Label } from "../ui/label"
 import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
 import { ToastAction } from "../ui/toast"
+import { DatePicker } from "./date-picker"
 
 const transactionIncomeFormSchema = z.object({
   amount: z.number().positive(),
@@ -57,6 +58,7 @@ export default function FormTransactionExpense({
   isFormOpen,
 }: TransactioFormProps) {
   const [isSheetOpen, setSheetOpen] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
 
   const { toast } = useToast()
   const router = useRouter()
@@ -91,7 +93,7 @@ export default function FormTransactionExpense({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, createdAt: selectedDate }),
       })
 
       if (response.ok) {
@@ -139,6 +141,9 @@ export default function FormTransactionExpense({
           {errors.amount && (
             <span className="text-red-500">{errors.amount.message}</span>
           )}
+        </div>
+        <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+          <DatePicker setDate={setSelectedDate} />
         </div>
         <div className="flex flex-col items-center justify-center space-y-2 mt-4">
           <Label className="w-full  text-white" htmlFor="name">
