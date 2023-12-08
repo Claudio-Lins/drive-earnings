@@ -1,4 +1,3 @@
-"use client"
 import {
   Sheet,
   SheetContent,
@@ -271,6 +270,26 @@ export default function FormTransactionExpense({
                         Recorrência
                       </Label>
                       <ToggleRecurrency setRecurring={setRecurring} />
+                    </div>
+                    <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+                      <Label
+                        className="w-full  text-zinc-950"
+                        htmlFor="location"
+                      >
+                        Localidade
+                      </Label>
+                      <Input
+                        type="text"
+                        id="location"
+                        className="w-full text-zinc-950"
+                        placeholder="Localidade"
+                        {...register("location")}
+                      />
+                      {errors.location && (
+                        <span className="text-red-500">
+                          {errors.location.message}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </ScrollArea>
