@@ -13,11 +13,25 @@ export default async function Home() {
   const session = await getServerSession(authOptions)
   if (!session) redirect("/signin")
 
-  const transaction = await prisma.transaction.findMany()
+  const transaction = (await prisma.transaction.findMany()).map(
+    (transaction) => ({
+      ...transaction,
+      amount: transaction.amount.toString(),
+    })
+  )
 
-  const transactionToday = await getTransactionToday()
-  const transactionWeek = await getTransactionWeek()
-  const transactionMonth = await getTransactionMonth()
+  const transactionToday = (await getTransactionToday()).map((transaction) => ({
+    ...transaction,
+    amount: transaction.amount.toString(),
+  }))
+  const transactionWeek = (await getTransactionWeek()).map((transaction) => ({
+    ...transaction,
+    amount: transaction.amount.toString(),
+  }))
+  const transactionMonth = (await getTransactionMonth()).map((transaction) => ({
+    ...transaction,
+    amount: transaction.amount.toString(),
+  }))
 
   const totalAmount = {
     todayIncome: transactionToday

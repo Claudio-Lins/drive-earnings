@@ -200,36 +200,38 @@ export default function FormTransactionExpense({
                 <Separator className="my-4" />
                 <ScrollArea className="flex-grow">
                   <div className="flex flex-col space-y-2">
-                    {categories.map((category, index) => (
-                      <div
-                        key={category.id}
-                        className={cn(
-                          "flex items-center border h-10 px-2 rounded-lg",
-                          index % 2 === 0 ? "bg-zinc-50" : "bg-zinc-100"
-                        )}
-                      >
-                        <div className="space-x-2 flex items-center w-full">
-                          <input
-                            className={cn("flex")}
-                            type="radio"
-                            id={category.name}
-                            value={category.id}
-                            {...register("categoryId")}
-                            onChange={() => {
-                              setSelectedCategory(category)
-                              setValue("categoryId", category.id)
-                              setSheetOpen(false)
-                            }}
-                          />
-                          <Label
-                            className="w-full flex items-center cursor-pointer h-8"
-                            htmlFor={category.name}
-                          >
-                            {category.name}
-                          </Label>
+                    {categories
+                      .filter((category) => category.type === "INCOME")
+                      .map((category, index) => (
+                        <div
+                          key={category.id}
+                          className={cn(
+                            "flex items-center border h-10 px-2 rounded-lg",
+                            index % 2 === 0 ? "bg-zinc-50" : "bg-zinc-100"
+                          )}
+                        >
+                          <div className="space-x-2 flex items-center w-full">
+                            <input
+                              className={cn("flex")}
+                              type="radio"
+                              id={category.name}
+                              value={category.id}
+                              {...register("categoryId")}
+                              onChange={() => {
+                                setSelectedCategory(category)
+                                setValue("categoryId", category.id)
+                                setSheetOpen(false)
+                              }}
+                            />
+                            <Label
+                              className="w-full flex items-center cursor-pointer h-8"
+                              htmlFor={category.name}
+                            >
+                              {category.name}
+                            </Label>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </ScrollArea>
               </SheetContent>

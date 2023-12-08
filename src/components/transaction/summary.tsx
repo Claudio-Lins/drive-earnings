@@ -2,13 +2,30 @@
 
 import { useSelectedDateStore } from "@/context/selescted-date-store"
 import { cn } from "@/lib/utils"
-import { Transaction } from "@prisma/client"
+import { TransactionType } from "@prisma/client"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
+interface TransactionTypes {
+  id: string
+  type: TransactionType
+  entity: string
+  paymentMethod: string
+  recurring: string | null
+  name: string
+  amount: string
+  location: string | null
+  notes: string | null
+  receipt: string | null
+  bankAccount: string | null
+  userId: string | null
+  categoryId: string | null
+  createdAt: Date
+}
+
 interface SummaryProps {
-  transactionToday: Transaction[]
-  transaction: Transaction[]
+  transactionToday: TransactionTypes[]
+  transaction: TransactionTypes[]
   totalAmountWeek: number
   totalAmountMonth: number
 }

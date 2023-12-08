@@ -5,7 +5,13 @@ import { NextRequest, NextResponse } from "next/server"
 export async function GET(req: Request) {
   const transactions = await prisma.transaction.findMany()
 
-  return NextResponse.json(transactions)
+  // Convert Decimal to string
+  const transactionsWithConvertedAmount = transactions.map((transaction) => ({
+    ...transaction,
+    amount: transaction.amount.toString(),
+  }))
+
+  return NextResponse.json(transactionsWithConvertedAmount)
 }
 
 export async function POST(request: NextRequest) {
