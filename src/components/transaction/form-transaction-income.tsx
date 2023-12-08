@@ -23,6 +23,8 @@ import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
 import { ToastAction } from "../ui/toast"
 import { DatePicker } from "./date-picker"
+import { TogglePaymentMethod } from "./toggle-payment-method"
+import { TogglePersonalCompany } from "./toggle-personal-company"
 
 const transactionIncomeFormSchema = z.object({
   amount: z.number().positive(),
@@ -58,7 +60,12 @@ export default function FormTransactionExpense({
   isFormOpen,
 }: TransactioFormProps) {
   const [isSheetOpen, setSheetOpen] = useState(false)
+  const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const [entity, setEntity] = useState<"PERSON" | "COMPANY">("PERSON")
+  const [paymentMethod, setPaymentMethod] = useState<
+    "CASH" | "CREDIT" | "DEBIT"
+  >("CASH")
 
   const { toast } = useToast()
   const router = useRouter()
@@ -74,7 +81,7 @@ export default function FormTransactionExpense({
     defaultValues: {
       type: "INCOME",
       userId: data?.user?.id,
-      categoryId: selectedCategory?.id,
+      categoryId: "",
       createdAt: new Date(),
       entity: "COMPANY",
       paymentMethod: "CASH",
@@ -93,7 +100,12 @@ export default function FormTransactionExpense({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...data, createdAt: selectedDate }),
+        body: JSON.stringify({
+          ...data,
+          entity,
+          paymentMethod,
+          createdAt: selectedDate,
+        }),
       })
 
       if (response.ok) {
@@ -104,6 +116,7 @@ export default function FormTransactionExpense({
         reset()
         router.refresh()
         setIsFormOpen(false)
+        setSelectedCategory(null)
       }
     } catch (error) {
       toast({
@@ -208,6 +221,41 @@ export default function FormTransactionExpense({
                       </div>
                     </div>
                   ))}
+                </div>
+              </ScrollArea>
+            </SheetContent>
+            {errors.categoryId && (
+              <span className="text-red-500">{errors.categoryId.message}</span>
+            )}
+          </Sheet>
+        </div>
+        <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+          <Sheet open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+            <SheetTrigger className="flex items-center gap-2">
+              <span className="text-white">Mais detalhes</span>
+            </SheetTrigger>
+            <SheetContent
+              side={"bottom"}
+              className="h-[100vh]  flex flex-col space-y-4 max-w-md"
+            >
+              <SheetHeader>
+                <SheetTitle className="text-2xl">Mais detalhes</SheetTitle>
+              </SheetHeader>
+              <Separator className="my-4" />
+              <ScrollArea className="flex-grow">
+                <div className="flex flex-col space-y-6">
+                  <div className="flex flex-col space-y-2">
+                    <Label className="w-full text-zinc-950" htmlFor="entity">
+                      Tipo da transação
+                    </Label>
+                    <TogglePersonalCompany setEntity={setEntity} />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <Label className="w-full text-zinc-950" htmlFor="entity">
+                      Metodo de pagamento
+                    </Label>
+                    <TogglePaymentMethod setPaymentMethod={setPaymentMethod} />
+                  </div>
                 </div>
               </ScrollArea>
             </SheetContent>
