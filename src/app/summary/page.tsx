@@ -1,4 +1,4 @@
-export default function Summary() {
+export default function SummaryPage() {
   return (
     <div className="flex items-center justify-evenly">
       <div className="">day</div>
