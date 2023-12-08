@@ -25,6 +25,7 @@ import { ToastAction } from "../ui/toast"
 import { DatePicker } from "./date-picker"
 import { TogglePaymentMethod } from "./toggle-payment-method"
 import { TogglePersonalCompany } from "./toggle-personal-company"
+import { ToggleRecurrency } from "./toggle-recurrency"
 
 const transactionIncomeFormSchema = z.object({
   amount: z.number().positive(),
@@ -66,6 +67,9 @@ export default function FormTransactionExpense({
   const [paymentMethod, setPaymentMethod] = useState<
     "CASH" | "CREDIT" | "DEBIT"
   >("CASH")
+  const [recurring, setRecurring] = useState<
+    "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY"
+  >("DAILY")
 
   const { toast } = useToast()
   const router = useRouter()
@@ -85,7 +89,7 @@ export default function FormTransactionExpense({
       createdAt: new Date(),
       entity: "COMPANY",
       paymentMethod: "CASH",
-      recurring: "MONTHLY",
+      recurring: "DAILY",
       location: "",
       notes: "",
       receipt: "",
@@ -104,6 +108,7 @@ export default function FormTransactionExpense({
           ...data,
           entity,
           paymentMethod,
+          recurring,
           createdAt: selectedDate,
         }),
       })
@@ -133,140 +138,154 @@ export default function FormTransactionExpense({
     <div>
       <form
         onSubmit={handleSubmit(handleIncomeForm)}
-        className="flex flex-col gap-2 mt-10"
+        className="flex flex-col justify-between h-[70vh] mt-10"
       >
-        <div className="flex flex-col items-center justify-center space-y-2">
-          <Label className="w-full text-center text-white" htmlFor="amount">
-            Amount
-          </Label>
-          <Input
-            type="text"
-            id="amount"
-            className="w-full text-center text-4xl font-bold h-20 border-none text-blue-400 after:content-['€'] after:font-bold after:text-2xl after:m"
-            placeholder="00,00 €"
-            {...register("amount", {
-              setValueAs: (value) =>
-                typeof value === "string"
-                  ? parseFloat(value.replace(",", "."))
-                  : value,
-            })}
-          />
-          {errors.amount && (
-            <span className="text-red-500">{errors.amount.message}</span>
-          )}
-        </div>
-        <div className="flex flex-col items-center justify-center space-y-2 mt-4">
-          <DatePicker setDate={setSelectedDate} />
-        </div>
-        <div className="flex flex-col items-center justify-center space-y-2 mt-4">
-          <Label className="w-full  text-white" htmlFor="name">
-            Descrição
-          </Label>
-          <Input
-            type="text"
-            id="name"
-            className="w-full text-white"
-            placeholder="Descrição da transação"
-            {...register("name")}
-          />
-          {errors.name && (
-            <span className="text-red-500">{errors.name.message}</span>
-          )}
-        </div>
-        <div className="flex flex-col items-center justify-center space-y-2 mt-4">
-          <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
-            <SheetTrigger className="flex items-center gap-2">
-              <Tag className="w-4 h-4 text-white" />
-              <span className="text-white">
-                {selectedCategory ? selectedCategory?.name : "Categoria"}
-              </span>
-            </SheetTrigger>
-            <SheetContent
-              side={"bottom"}
-              className="h-[80vh]  flex flex-col space-y-4 max-w-md"
-            >
-              <SheetHeader>
-                <SheetTitle className="text-2xl">Categorias</SheetTitle>
-              </SheetHeader>
-              <Separator className="my-4" />
-              <ScrollArea className="flex-grow">
-                <div className="flex flex-col space-y-2">
-                  {categories.map((category, index) => (
-                    <div
-                      key={category.id}
-                      className={cn(
-                        "flex items-center border h-10 px-2 rounded-lg",
-                        index % 2 === 0 ? "bg-zinc-50" : "bg-zinc-100"
-                      )}
-                    >
-                      <div className="space-x-2 flex items-center w-full">
-                        <input
-                          className={cn("flex")}
-                          type="radio"
-                          id={category.name}
-                          value={category.id}
-                          {...register("categoryId")}
-                          onChange={() => {
-                            setSelectedCategory(category)
-                            setValue("categoryId", category.id)
-                            setSheetOpen(false)
-                          }}
-                        />
-                        <Label
-                          className="w-full flex items-center cursor-pointer h-8"
-                          htmlFor={category.name}
-                        >
-                          {category.name}
-                        </Label>
+        <div className="flex flex-col space-y-6 flex-1">
+          <div className="flex flex-col items-center justify-center space-y-2">
+            <Label className="w-full text-center text-white" htmlFor="amount">
+              Amount
+            </Label>
+            <Input
+              type="text"
+              id="amount"
+              className="w-full text-center text-4xl font-bold h-20 border-none text-blue-400 after:content-['€'] after:font-bold after:text-2xl after:m"
+              placeholder="00,00 €"
+              {...register("amount", {
+                setValueAs: (value) =>
+                  typeof value === "string"
+                    ? parseFloat(value.replace(",", "."))
+                    : value,
+              })}
+            />
+            {errors.amount && (
+              <span className="text-red-500">{errors.amount.message}</span>
+            )}
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+            <DatePicker setDate={setSelectedDate} />
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+            <Label className="w-full  text-white" htmlFor="name">
+              Descrição
+            </Label>
+            <Input
+              type="text"
+              id="name"
+              className="w-full text-white"
+              placeholder="Descrição da transação"
+              {...register("name")}
+            />
+            {errors.name && (
+              <span className="text-red-500">{errors.name.message}</span>
+            )}
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+            <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+              <SheetTrigger className="flex items-center gap-2">
+                <Tag className="w-4 h-4 text-white" />
+                <span className="text-white">
+                  {selectedCategory ? selectedCategory?.name : "Categoria"}
+                </span>
+              </SheetTrigger>
+              <SheetContent
+                side={"bottom"}
+                className="h-[80vh]  flex flex-col space-y-4 max-w-md"
+              >
+                <SheetHeader>
+                  <SheetTitle className="text-2xl">Categorias</SheetTitle>
+                </SheetHeader>
+                <Separator className="my-4" />
+                <ScrollArea className="flex-grow">
+                  <div className="flex flex-col space-y-2">
+                    {categories.map((category, index) => (
+                      <div
+                        key={category.id}
+                        className={cn(
+                          "flex items-center border h-10 px-2 rounded-lg",
+                          index % 2 === 0 ? "bg-zinc-50" : "bg-zinc-100"
+                        )}
+                      >
+                        <div className="space-x-2 flex items-center w-full">
+                          <input
+                            className={cn("flex")}
+                            type="radio"
+                            id={category.name}
+                            value={category.id}
+                            {...register("categoryId")}
+                            onChange={() => {
+                              setSelectedCategory(category)
+                              setValue("categoryId", category.id)
+                              setSheetOpen(false)
+                            }}
+                          />
+                          <Label
+                            className="w-full flex items-center cursor-pointer h-8"
+                            htmlFor={category.name}
+                          >
+                            {category.name}
+                          </Label>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </SheetContent>
+              {errors.categoryId && (
+                <span className="text-red-500">
+                  {errors.categoryId.message}
+                </span>
+              )}
+            </Sheet>
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+            <Sheet open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+              <SheetTrigger className="flex items-center gap-2">
+                <span className="text-white">Mais detalhes</span>
+              </SheetTrigger>
+              <SheetContent
+                side={"bottom"}
+                className="h-[100vh]  flex flex-col space-y-4 max-w-md"
+              >
+                <SheetHeader>
+                  <SheetTitle className="text-2xl">Mais detalhes</SheetTitle>
+                </SheetHeader>
+                <Separator className="my-4" />
+                <ScrollArea className="flex-grow">
+                  <div className="flex flex-col space-y-8">
+                    <div className="flex flex-col space-y-2">
+                      <Label className="w-full text-zinc-950" htmlFor="entity">
+                        Tipo da transação
+                      </Label>
+                      <TogglePersonalCompany setEntity={setEntity} />
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </SheetContent>
-            {errors.categoryId && (
-              <span className="text-red-500">{errors.categoryId.message}</span>
-            )}
-          </Sheet>
-        </div>
-        <div className="flex flex-col items-center justify-center space-y-2 mt-4">
-          <Sheet open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-            <SheetTrigger className="flex items-center gap-2">
-              <span className="text-white">Mais detalhes</span>
-            </SheetTrigger>
-            <SheetContent
-              side={"bottom"}
-              className="h-[100vh]  flex flex-col space-y-4 max-w-md"
-            >
-              <SheetHeader>
-                <SheetTitle className="text-2xl">Mais detalhes</SheetTitle>
-              </SheetHeader>
-              <Separator className="my-4" />
-              <ScrollArea className="flex-grow">
-                <div className="flex flex-col space-y-6">
-                  <div className="flex flex-col space-y-2">
-                    <Label className="w-full text-zinc-950" htmlFor="entity">
-                      Tipo da transação
-                    </Label>
-                    <TogglePersonalCompany setEntity={setEntity} />
+                    <div className="flex flex-col space-y-2">
+                      <Label className="w-full text-zinc-950" htmlFor="entity">
+                        Metodo de pagamento
+                      </Label>
+                      <TogglePaymentMethod
+                        setPaymentMethod={setPaymentMethod}
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                      <Label className="w-full text-zinc-950" htmlFor="entity">
+                        Recorrência
+                      </Label>
+                      <ToggleRecurrency setRecurring={setRecurring} />
+                    </div>
                   </div>
-                  <div className="flex flex-col space-y-2">
-                    <Label className="w-full text-zinc-950" htmlFor="entity">
-                      Metodo de pagamento
-                    </Label>
-                    <TogglePaymentMethod setPaymentMethod={setPaymentMethod} />
-                  </div>
-                </div>
-              </ScrollArea>
-            </SheetContent>
-            {errors.categoryId && (
-              <span className="text-red-500">{errors.categoryId.message}</span>
-            )}
-          </Sheet>
+                </ScrollArea>
+              </SheetContent>
+              {errors.categoryId && (
+                <span className="text-red-500">
+                  {errors.categoryId.message}
+                </span>
+              )}
+            </Sheet>
+          </div>
         </div>
         <div>
           <Button
-            className="w-full mt-10 bg-gradient-to-r from-purple-800 to-purple-950 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 transaction-all duration-300 ease-in-out"
+            className="w-full mt-10 bg-gradient-to-r from-purple-800 to-purple-950 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 transaction-all duration-300 ease-in-out mb-auto h-10"
             type="submit"
             disabled={isSubmitting}
           >
