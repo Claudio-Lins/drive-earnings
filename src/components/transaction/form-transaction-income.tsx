@@ -1,5 +1,6 @@
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -9,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Category } from "@prisma/client"
-import { Tag } from "lucide-react"
+import { CheckCheck, Tag } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -25,6 +26,7 @@ import { DatePicker } from "./date-picker"
 import { TogglePaymentMethod } from "./toggle-payment-method"
 import { TogglePersonalCompany } from "./toggle-personal-company"
 import { ToggleRecurrency } from "./toggle-recurrency"
+import { UploadRecive } from "./upload-recive"
 
 const transactionIncomeFormSchema = z.object({
   amount: z.number().positive(),
@@ -63,6 +65,7 @@ export default function FormTransactionExpense({
   const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [entity, setEntity] = useState<"PERSON" | "COMPANY">("PERSON")
+  const [receiptUrl, setReceiptUrl] = useState<string>("")
   const [paymentMethod, setPaymentMethod] = useState<
     "CASH" | "CREDIT" | "DEBIT"
   >("CASH")
@@ -108,6 +111,7 @@ export default function FormTransactionExpense({
           entity,
           paymentMethod,
           recurring,
+          receipt: receiptUrl,
           createdAt: selectedDate,
         }),
       })
@@ -291,6 +295,31 @@ export default function FormTransactionExpense({
                         </span>
                       )}
                     </div>
+                    <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+                      <Label
+                        className="w-full  text-zinc-950"
+                        htmlFor="location"
+                      >
+                        Recibo
+                      </Label>
+                      <UploadRecive setReceiptUrl={setReceiptUrl} />
+                      {receiptUrl && (
+                        <div className="flex items-center">
+                          <span className="text-green-500">Recibo enviado</span>
+                          <CheckCheck className="w-4 h-4 ml-2 text-green-500" />
+                        </div>
+                      )}
+                    </div>
+                    <Separator className="my-4" />
+                    <SheetClose>
+                      <Button
+                        className="w-full mt-6 "
+                        variant={"default"}
+                        type="button"
+                      >
+                        ok
+                      </Button>
+                    </SheetClose>
                   </div>
                 </ScrollArea>
               </SheetContent>
