@@ -13,7 +13,7 @@ import { Category } from "@prisma/client"
 import { CheckCheck, Tag } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Button } from "../ui/button"
@@ -50,6 +50,8 @@ interface TransactioFormProps {
   setSelectedCategory: (category: Category | null) => void
   setIsFormOpen: (value: boolean) => void
   isFormOpen: boolean
+  setIsExpense: (value: boolean) => void
+  setIsIncome: (value: boolean) => void
 }
 
 type TransactionFormData = z.infer<typeof transactionIncomeFormSchema>
@@ -59,6 +61,9 @@ export function FormTransactionExpense({
   setSelectedCategory,
   selectedCategory,
   setIsFormOpen,
+  isFormOpen,
+  setIsExpense,
+  setIsIncome,
 }: TransactioFormProps) {
   const [isSheetOpen, setSheetOpen] = useState(false)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
@@ -97,6 +102,11 @@ export function FormTransactionExpense({
       bankAccount: "",
     },
   })
+
+  useEffect(() => {
+    setIsExpense(true)
+    setIsIncome(false)
+  }, [setIsExpense, setIsIncome])
 
   async function handleIncomeForm(data: TransactionFormData) {
     try {

@@ -75,11 +75,11 @@ export function Summary({
       transition={{ duration: 0.5, delay: 3.5 }}
       className="flex items-center justify-evenly gap-2 lg:px-32"
     >
-      <div className="w-32 flex flex-col items-center justify-between space-y-4">
+      <div className="w-36 flex flex-col items-center justify-between space-y-4">
         <small>Taday</small>
         <span
           className={cn(
-            "text-3xl font-bold",
+            "text-2xl lg:text-3xl font-bold",
             todalDaily > todayExpense
               ? "bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text "
               : "text-red-500"
@@ -88,16 +88,22 @@ export function Summary({
           {todalDaily} €
         </span>
       </div>
-      <div className="w-32 flex flex-col items-center justify-between space-y-4">
+      <div className="w-36 flex flex-col items-center justify-between space-y-4">
         <small>Week</small>
-        <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">
-          {totalAmountWeek} €
+        <span className="text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">
+          {new Intl.NumberFormat("pt-PT", {
+            style: "currency",
+            currency: "EUR",
+          }).format(totalAmountWeek)}
         </span>
       </div>
-      <div className="w-32 flex flex-col items-center justify-between space-y-4">
+      <div className="w-36 flex flex-col items-center justify-between space-y-4">
         <small>Month</small>
-        <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">
-          {totalAmountMonth} €
+        <span className="text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">
+          {new Intl.NumberFormat("pt-PT", {
+            style: "currency",
+            currency: "EUR",
+          }).format(totalAmountMonth)}
         </span>
       </div>
     </motion.div>

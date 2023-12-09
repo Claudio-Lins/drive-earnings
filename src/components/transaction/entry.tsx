@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { cn } from "@/lib/utils"
 import { Category } from "@prisma/client"
 import { PlusCircle, X } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -23,6 +24,8 @@ export default function Entry() {
   )
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [categories, setCategories] = useState([])
+  const [isIncome, setIsIncome] = useState(true)
+  const [isExpense, setIsExpense] = useState(false)
   useEffect(() => {
     fetch("/api/category")
       .then((res) => res.json())
@@ -33,7 +36,14 @@ export default function Entry() {
       <SheetTrigger className="-mt-10 rounded-full flex items-center shadow-md bg-white justify-center p-2">
         <PlusCircle className="w-12 h-12 font-medium " />
       </SheetTrigger>
-      <SheetContent className="max-w-none w-full bg-zinc-950">
+      <SheetContent
+        className={cn(
+          "max-w-none w-full ",
+          isIncome
+            ? "bg-gradient-to-r from-zinc-950 via-blue-950 to-zinc-950"
+            : "bg-gradient-to-r from-zinc-950 via-red-950 to-zinc-950"
+        )}
+      >
         <SheetHeader>
           <SheetTitle className="font-bold text-4xl text-zinc-50">
             Transações
@@ -66,6 +76,8 @@ export default function Entry() {
               setIsFormOpen={setIsFormOpen}
               isFormOpen={isFormOpen}
               categories={categories}
+              setIsExpense={setIsExpense}
+              setIsIncome={setIsIncome}
             />
           </TabsContent>
           <TabsContent value="expense">
@@ -75,6 +87,8 @@ export default function Entry() {
               setIsFormOpen={setIsFormOpen}
               isFormOpen={isFormOpen}
               categories={categories}
+              setIsExpense={setIsExpense}
+              setIsIncome={setIsIncome}
             />
           </TabsContent>
         </Tabs>
