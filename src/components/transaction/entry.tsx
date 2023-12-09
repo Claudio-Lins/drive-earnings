@@ -14,8 +14,8 @@ import { Category } from "@prisma/client"
 import { PlusCircle, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Separator } from "../ui/separator"
-import FormTransactionExpense from "./form-transaction-expense"
-import FormTransactionIncome from "./form-transaction-income"
+import { FormTransactionExpense } from "./form-transaction-expense"
+import { FormTransactionIncome } from "./form-transaction-income"
 
 export default function Entry() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -69,7 +69,13 @@ export default function Entry() {
             />
           </TabsContent>
           <TabsContent value="expense">
-            <FormTransactionExpense />
+            <FormTransactionExpense
+              setSelectedCategory={setSelectedCategory}
+              selectedCategory={selectedCategory}
+              setIsFormOpen={setIsFormOpen}
+              isFormOpen={isFormOpen}
+              categories={categories}
+            />
           </TabsContent>
         </Tabs>
       </SheetContent>

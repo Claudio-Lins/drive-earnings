@@ -54,7 +54,7 @@ interface TransactioFormProps {
 
 type TransactionFormData = z.infer<typeof transactionIncomeFormSchema>
 
-export default function FormTransactionExpense({
+export function FormTransactionIncome({
   categories,
   setSelectedCategory,
   selectedCategory,
@@ -191,8 +191,8 @@ export default function FormTransactionExpense({
                 </span>
               </SheetTrigger>
               <SheetContent
-                side={"bottom"}
-                className="h-[80vh]  flex flex-col space-y-4 max-w-md"
+                side={"right"}
+                className="h-[100vh] justify-center mx-auto flex flex-col space-y-4"
               >
                 <SheetHeader>
                   <SheetTitle className="text-2xl">Categorias</SheetTitle>
