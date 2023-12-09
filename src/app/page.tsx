@@ -80,15 +80,13 @@ export default async function Home() {
   }
 
   return (
-    <main className="pt-56 lg:pt-64 flex min-h-screen flex-col items-center justify-between p-4 lg:p-24 bg-zinc-950 text-white">
-      <div className="w-full">
-        <Summary
-          transactionToday={transactionToday}
-          transaction={transaction}
-          totalAmountWeek={totalAmount.weekIncome - totalAmount.weekExpense}
-          totalAmountMonth={totalAmount.monthIncome - totalAmount.monthExpense}
-        />
-      </div>
+    <main className="pt-48 lg:pt-56">
+      <Summary
+        transactionToday={transactionToday}
+        transaction={transaction}
+        totalAmountWeek={totalAmount.weekIncome - totalAmount.weekExpense}
+        totalAmountMonth={totalAmount.monthIncome - totalAmount.monthExpense}
+      />
     </main>
   )
 }

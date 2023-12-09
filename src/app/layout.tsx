@@ -27,15 +27,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={cn(" antialiased", inter.className)}>
+      <body className={cn("antialiased bg-zinc-950", inter.className)}>
         <AuthProvider>
-          <main className="min-h-screen">
+          <main className="pt-4">
             <Profile />
-            {session && (
-              <div className="w-full">
-                <CurrentWeek />
-              </div>
-            )}
+            {session && <CurrentWeek />}
             {children}
             <Footer session={session} />
             <Toaster />

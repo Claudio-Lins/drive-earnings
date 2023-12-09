@@ -73,7 +73,7 @@ export function Summary({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 3.5 }}
-      className="flex items-center justify-evenly gap-2 lg:px-32"
+      className="flex text-white max-h-40 w-full items-center justify-evenly gap-2 lg:px-32 fixed"
     >
       <div className="w-36 flex flex-col items-center justify-between space-y-4">
         <small>Taday</small>

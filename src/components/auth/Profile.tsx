@@ -26,7 +26,7 @@ export function Profile() {
       animate={{ x: 0 }}
       transition={{ duration: 1.5, delay: 1.5 }}
       className={cn(
-        "flex z-10 flex-col items-center justify-center absolute top-4 right-4",
+        "flex z-10 flex-col items-center justify-center top-4 right-4 fixed",
         !data && "hidden"
       )}
     >

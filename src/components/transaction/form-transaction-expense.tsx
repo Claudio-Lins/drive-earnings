@@ -191,7 +191,7 @@ export function FormTransactionExpense({
               <span className="text-red-500">{errors.name.message}</span>
             )}
           </div>
-          <div className="flex flex-col items-center justify-center space-y-2 mt-4">
+          <div className="flex w-full flex-col items-center justify-center space-y-2 mt-4">
             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger className="flex items-center gap-2">
                 <Tag className="w-4 h-4 text-white" />
@@ -199,10 +199,7 @@ export function FormTransactionExpense({
                   {selectedCategory ? selectedCategory?.name : "Categoria"}
                 </span>
               </SheetTrigger>
-              <SheetContent
-                side={"right"}
-                className="h-[100vh]  justify-center mx-auto flex flex-col space-y-4"
-              >
+              <SheetContent side={"right"} className="max-w-none w-full ">
                 <SheetHeader>
                   <SheetTitle className="text-2xl">Categorias</SheetTitle>
                 </SheetHeader>
@@ -256,10 +253,7 @@ export function FormTransactionExpense({
               <SheetTrigger className="flex items-center gap-2">
                 <span className="text-white">Mais detalhes (opcional)</span>
               </SheetTrigger>
-              <SheetContent
-                side={"bottom"}
-                className="h-[100vh]  flex flex-col space-y-4 max-w-md"
-              >
+              <SheetContent side={"right"} className="max-w-none w-full ">
                 <SheetHeader>
                   <SheetTitle className="text-2xl">
                     Detalhes (opcional)
