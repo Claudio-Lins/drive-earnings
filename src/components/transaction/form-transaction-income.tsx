@@ -150,7 +150,7 @@ export function FormTransactionIncome({
     <div>
       <form
         onSubmit={handleSubmit(handleIncomeForm)}
-        className="flex flex-col justify-between h-[70vh] mt-10"
+        className="flex flex-col justify-between  mt-10"
       >
         <div className="flex flex-col space-y-6 flex-1">
           <div className="flex flex-col items-center justify-center space-y-2">
