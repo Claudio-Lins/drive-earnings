@@ -119,7 +119,7 @@ export default function FormTransactionExpense({
       if (response.ok) {
         toast({
           title: "Transação criada com sucesso",
-          description: "Sua transação foi criada com sucesso",
+          description: `Valor: ${data.amount} €`,
         })
         reset()
         router.refresh()
@@ -245,14 +245,16 @@ export default function FormTransactionExpense({
           <div className="flex flex-col items-center justify-center space-y-2 mt-4">
             <Sheet open={isDetailOpen} onOpenChange={setIsDetailOpen}>
               <SheetTrigger className="flex items-center gap-2">
-                <span className="text-white">Mais detalhes</span>
+                <span className="text-white">Mais detalhes (opcional)</span>
               </SheetTrigger>
               <SheetContent
                 side={"bottom"}
                 className="h-[100vh]  flex flex-col space-y-4 max-w-md"
               >
                 <SheetHeader>
-                  <SheetTitle className="text-2xl">Mais detalhes</SheetTitle>
+                  <SheetTitle className="text-2xl">
+                    Detalhes (opcional)
+                  </SheetTitle>
                 </SheetHeader>
                 <Separator className="my-4" />
                 {/* Details */}
