@@ -1,5 +1,3 @@
-"use client"
-
 import { CheckCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -10,7 +8,7 @@ interface TogglePaymentMethodProps {
 }
 
 export function ToggleRecurrency({ setRecurring }: TogglePaymentMethodProps) {
-  const [isDaily, setIsDaily] = useState(true)
+  const [isDaily, setIsDaily] = useState(false)
   const [isWeekly, setIsWeekly] = useState(false)
   const [isMonthly, setIsMonthly] = useState(false)
   const [isYearly, setIsYearly] = useState(false)
@@ -20,7 +18,7 @@ export function ToggleRecurrency({ setRecurring }: TogglePaymentMethodProps) {
     if (isWeekly) setRecurring("WEEKLY")
     if (isMonthly) setRecurring("MONTHLY")
     if (isYearly) setRecurring("YEARLY")
-  }, [isDaily, isWeekly, isMonthly, isYearly])
+  }, [isDaily, isWeekly, isMonthly, isYearly, setRecurring])
   return (
     <fieldset className="flex items-center gap-2">
       <legend className="sr-only">Diário</legend>

@@ -255,6 +255,7 @@ export default function FormTransactionExpense({
                   <SheetTitle className="text-2xl">Mais detalhes</SheetTitle>
                 </SheetHeader>
                 <Separator className="my-4" />
+                {/* Details */}
                 <ScrollArea className="flex-grow">
                   <div className="flex flex-col space-y-8">
                     <div className="flex flex-col space-y-2">

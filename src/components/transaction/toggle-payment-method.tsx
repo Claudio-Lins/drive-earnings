@@ -1,5 +1,3 @@
-"use client"
-
 import { CheckCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -12,7 +10,7 @@ interface TogglePaymentMethodProps {
 export function TogglePaymentMethod({
   setPaymentMethod,
 }: TogglePaymentMethodProps) {
-  const [isCash, setIsCash] = useState(true)
+  const [isCash, setIsCash] = useState(false)
   const [isCredit, setIsCredit] = useState(false)
   const [isDebit, setIsDebit] = useState(false)
 
@@ -20,19 +18,19 @@ export function TogglePaymentMethod({
     if (isCash) {
       setPaymentMethod("CASH")
     }
-  }, [isCash])
+  }, [isCash, setPaymentMethod])
 
   useEffect(() => {
     if (isCredit) {
       setPaymentMethod("CREDIT")
     }
-  }, [isCredit])
+  }, [isCredit, setPaymentMethod])
 
   useEffect(() => {
     if (isDebit) {
       setPaymentMethod("DEBIT")
     }
-  }, [isDebit])
+  }, [isDebit, setPaymentMethod])
 
   return (
     <fieldset className="flex items-center gap-2">
