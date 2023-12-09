@@ -1,5 +1,3 @@
-"use client"
-
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import * as React from "react"
@@ -23,7 +21,7 @@ export function DatePicker({ setDate }: DatePickerProps) {
   const [date, setDateState] = React.useState<Date>()
   useEffect(() => {
     setDate(date)
-  }, [date])
+  }, [date, setDate])
   return (
     <div className="w-full flex flex-col space-y-2">
       <Label className="text-white">Date</Label>
