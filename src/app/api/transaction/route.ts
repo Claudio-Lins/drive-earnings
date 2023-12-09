@@ -1,11 +1,12 @@
 import prisma from "@/lib/prisma"
 import dayjs from "dayjs"
-import { NextApiRequest, NextApiResponse } from "next"
+import { IncomingMessage } from "http"
+import { NextApiResponse } from "next"
 import { getSession } from "next-auth/react"
 import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req })
+export async function GET(req: NextRequest, res: NextApiResponse) {
+  const session = await getSession({ req: req as unknown as IncomingMessage })
 
   if (!session || !session.user || !session.user.id) {
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
