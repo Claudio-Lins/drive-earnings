@@ -9,29 +9,54 @@ import prisma from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 
+async function getTrasactionByUserId(userId: string) {
+  return await prisma.transaction.findMany({
+    where: {
+      userId,
+    },
+  })
+}
+
 export default async function Home() {
   const session = await getServerSession(authOptions)
   if (!session) redirect("/signin")
 
-  const transaction = (await prisma.transaction.findMany()).map(
+  const transaction = (await getTrasactionByUserId(session.user.id)).map(
     (transaction) => ({
       ...transaction,
       amount: transaction.amount.toString(),
     })
   )
 
-  const transactionToday = (await getTransactionToday()).map((transaction) => ({
-    ...transaction,
-    amount: transaction.amount.toString(),
-  }))
-  const transactionWeek = (await getTransactionWeek()).map((transaction) => ({
-    ...transaction,
-    amount: transaction.amount.toString(),
-  }))
-  const transactionMonth = (await getTransactionMonth()).map((transaction) => ({
-    ...transaction,
-    amount: transaction.amount.toString(),
-  }))
+  // const transaction = (
+  //   await prisma.transaction.findMany({
+  //     where: {
+  //       userId: session.user.id,
+  //     },
+  //   })
+  // ).map((transaction) => ({
+  //   ...transaction,
+  //   amount: transaction.amount.toString(),
+  // }))
+
+  const transactionToday = (await getTransactionToday())
+    .filter((transaction) => transaction.userId === session.user.id)
+    .map((transaction) => ({
+      ...transaction,
+      amount: transaction.amount.toString(),
+    }))
+  const transactionWeek = (await getTransactionWeek())
+    .filter((transaction) => transaction.userId === session.user.id)
+    .map((transaction) => ({
+      ...transaction,
+      amount: transaction.amount.toString(),
+    }))
+  const transactionMonth = (await getTransactionMonth())
+    .filter((transaction) => transaction.userId === session.user.id)
+    .map((transaction) => ({
+      ...transaction,
+      amount: transaction.amount.toString(),
+    }))
 
   const totalAmount = {
     todayIncome: transactionToday

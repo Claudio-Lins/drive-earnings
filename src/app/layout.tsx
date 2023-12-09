@@ -31,7 +31,11 @@ export default async function RootLayout({
         <AuthProvider>
           <main className="min-h-screen">
             <Profile />
-            <CurrentWeek />
+            {session && (
+              <div className="w-full">
+                <CurrentWeek />
+              </div>
+            )}
             {children}
             <Footer session={session} />
             <Toaster />

@@ -1,9 +1,26 @@
 import prisma from "@/lib/prisma"
 import dayjs from "dayjs"
+import { NextApiRequest, NextApiResponse } from "next"
+import { getSession } from "next-auth/react"
 import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(req: Request) {
-  const transactions = await prisma.transaction.findMany()
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getSession({ req })
+
+  if (!session || !session.user || !session.user.id) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), {
+      status: 401,
+    })
+  }
+
+  const userId = session.user.id
+  console.log(userId)
+
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId,
+    },
+  })
 
   // Convert Decimal to string
   const transactionsWithConvertedAmount = transactions.map((transaction) => ({
@@ -11,7 +28,7 @@ export async function GET(req: Request) {
     amount: transaction.amount.toString(),
   }))
 
-  return NextResponse.json(transactionsWithConvertedAmount)
+  return res.json(transactionsWithConvertedAmount)
 }
 
 export async function POST(request: NextRequest) {

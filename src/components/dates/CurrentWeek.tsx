@@ -71,11 +71,9 @@ export function CurrentWeek() {
     if (weekNumber === -1) setWeekNumber(51)
   }, [calendarWeeksofYear, currentDate, weekNumber])
 
-  //   console.log(calendarWeeksofYear[34][0].format("MMMM"));
   function getSelectedDate(dia: string, mes: string) {
     setDaySelected(dia)
     setMonthSelected(mes)
-    console.log(+dia)
   }
   return (
     <div className="fixed mx-auto w-full flex flex-col space-y-4 items-center mt-4  bg-transparent text-white">
