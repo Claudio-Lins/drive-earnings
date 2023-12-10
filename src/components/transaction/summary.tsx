@@ -85,7 +85,10 @@ export function Summary({
               : "text-red-500"
           )}
         >
-          {todalDaily} €
+          {new Intl.NumberFormat("pt-PT", {
+            style: "currency",
+            currency: "EUR",
+          }).format(todalDaily)}
         </span>
       </div>
       <div className="w-36 flex flex-col items-center justify-between space-y-4">

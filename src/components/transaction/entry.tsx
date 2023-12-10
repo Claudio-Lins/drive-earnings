@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { CategoryTypes } from "@/@types/category"
 import { cn } from "@/lib/utils"
-import { Category } from "@prisma/client"
 import { PlusCircle, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Separator } from "../ui/separator"
@@ -19,13 +19,13 @@ import { FormTransactionExpense } from "./form-transaction-expense"
 import { FormTransactionIncome } from "./form-transaction-income"
 
 export default function Entry() {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  )
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryTypes | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [categories, setCategories] = useState([])
   const [isIncome, setIsIncome] = useState(true)
   const [isExpense, setIsExpense] = useState(false)
+
   useEffect(() => {
     fetch("/api/category")
       .then((res) => res.json())
@@ -75,7 +75,6 @@ export default function Entry() {
               selectedCategory={selectedCategory}
               setIsFormOpen={setIsFormOpen}
               isFormOpen={isFormOpen}
-              categories={categories}
               setIsExpense={setIsExpense}
               setIsIncome={setIsIncome}
             />
@@ -86,7 +85,6 @@ export default function Entry() {
               selectedCategory={selectedCategory}
               setIsFormOpen={setIsFormOpen}
               isFormOpen={isFormOpen}
-              categories={categories}
               setIsExpense={setIsExpense}
               setIsIncome={setIsIncome}
             />

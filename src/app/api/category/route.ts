@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function GET() {
   try {
@@ -8,5 +8,26 @@ export async function GET() {
   } catch (error) {
     console.log(error)
     return NextResponse.json({ message: "Erro ao buscar Categorias" })
+  }
+}
+
+// POST
+export async function POST(request: NextRequest) {
+  const body = await request.json()
+
+  try {
+    const category = await prisma.category.create({
+      data: {
+        name: body.name,
+        color: body.color,
+        icon: body.icon,
+        type: body.type,
+      },
+    })
+
+    return NextResponse.json(category, { status: 201 })
+  } catch (error) {
+    console.log(error)
+    return NextResponse.json({ message: "Erro ao criar Categoria" })
   }
 }

@@ -1,3 +1,4 @@
+import { CategoryTypes } from "@/@types/category"
 import {
   Sheet,
   SheetClose,
@@ -7,15 +8,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { useToast } from "@/components/ui/use-toast"
+import { useCategoryStore } from "@/context/use-category-store"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Category } from "@prisma/client"
 import { CheckCheck, Tag } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { FormCategory } from "../category/form-category"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
@@ -29,8 +31,10 @@ import { ToggleRecurrency } from "./toggle-recurrency"
 import { UploadRecive } from "./upload-recive"
 
 const transactionIncomeFormSchema = z.object({
-  amount: z.number().positive(),
-  name: z.string().min(3).max(255),
+  amount: z.number().min(0.01, "O valor mínimo é de 0.01 €"),
+  name: z
+    .string()
+    .min(3, "O nome da transação deve ter no mínimo 3 caracteres"),
   type: z.enum(["EXPENSE"]),
   entity: z.enum(["COMPANY", "PERSON"]),
   paymentMethod: z.enum(["CASH", "CREDIT", "DEBIT"]),
@@ -45,9 +49,8 @@ const transactionIncomeFormSchema = z.object({
 })
 
 interface TransactioFormProps {
-  categories: Category[]
-  selectedCategory: Category | null
-  setSelectedCategory: (category: Category | null) => void
+  selectedCategory: CategoryTypes | null
+  setSelectedCategory: (category: CategoryTypes | null) => void
   setIsFormOpen: (value: boolean) => void
   isFormOpen: boolean
   setIsExpense: (value: boolean) => void
@@ -57,7 +60,6 @@ interface TransactioFormProps {
 type TransactionFormData = z.infer<typeof transactionIncomeFormSchema>
 
 export function FormTransactionExpense({
-  categories,
   setSelectedCategory,
   selectedCategory,
   setIsFormOpen,
@@ -65,6 +67,8 @@ export function FormTransactionExpense({
   setIsExpense,
   setIsIncome,
 }: TransactioFormProps) {
+  const { categories } = useCategoryStore()
+  const [localCategories, setLocalCategories] = useState(categories)
   const [isSheetOpen, setSheetOpen] = useState(false)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
@@ -107,6 +111,10 @@ export function FormTransactionExpense({
     setIsExpense(true)
     setIsIncome(false)
   }, [setIsExpense, setIsIncome])
+
+  useEffect(() => {
+    setLocalCategories(categories)
+  }, [categories])
 
   async function handleIncomeForm(data: TransactionFormData) {
     try {
@@ -204,9 +212,9 @@ export function FormTransactionExpense({
                   <SheetTitle className="text-2xl">Categorias</SheetTitle>
                 </SheetHeader>
                 <Separator className="my-4" />
-                <ScrollArea className="flex-grow">
+                <ScrollArea className="flex-grow mb-6">
                   <div className="flex flex-col space-y-2">
-                    {categories
+                    {localCategories
                       .filter((category) => category.type === "EXPENSE")
                       .map((category, index) => (
                         <div
@@ -240,12 +248,8 @@ export function FormTransactionExpense({
                       ))}
                   </div>
                 </ScrollArea>
+                <FormCategory typeOfCategory="EXPENSE" />
               </SheetContent>
-              {errors.categoryId && (
-                <span className="text-red-500">
-                  {errors.categoryId.message}
-                </span>
-              )}
             </Sheet>
           </div>
           <div className="flex flex-col items-center justify-center space-y-2 mt-4">
@@ -331,11 +335,6 @@ export function FormTransactionExpense({
                   </div>
                 </ScrollArea>
               </SheetContent>
-              {errors.categoryId && (
-                <span className="text-red-500">
-                  {errors.categoryId.message}
-                </span>
-              )}
             </Sheet>
           </div>
         </div>
