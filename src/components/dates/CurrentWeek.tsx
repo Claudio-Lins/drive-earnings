@@ -47,12 +47,13 @@ export function CurrentWeek() {
 
   //   const currentMonth = currentDate.format("MMMM");
   const currentYear = currentDate.format("YYYY")
-  const calendarWeeksofYear = useMemo(() => {
+  const calendarWeeksOfYear = useMemo(() => {
     const firstDayOfYear = currentDate.startOf("year")
     const firstDayOfCalendar = firstDayOfYear.startOf("week")
     const lastDayOfYear = currentDate.endOf("year")
     const lastDayOfCalendar = lastDayOfYear.endOf("week")
     const calendar = []
+
     let currentDay = firstDayOfCalendar
     while (currentDay.isBefore(lastDayOfCalendar)) {
       const week = []
@@ -66,10 +67,10 @@ export function CurrentWeek() {
   }, [currentDate])
 
   useEffect(() => {
-    setCurrentMonth(calendarWeeksofYear[weekNumber][0].format("MMMM"))
+    setCurrentMonth(calendarWeeksOfYear[weekNumber][0].format("MMMM"))
     if (weekNumber === 52) setWeekNumber(0)
     if (weekNumber === -1) setWeekNumber(51)
-  }, [calendarWeeksofYear, currentDate, weekNumber])
+  }, [calendarWeeksOfYear, currentDate, weekNumber])
 
   function getSelectedDate(dia: string, mes: string) {
     setDaySelected(dia)
@@ -97,7 +98,7 @@ export function CurrentWeek() {
         </button>
       </motion.div>
       <div className="flex md:flex-row items-center justify-center gap-2 md:gap-6">
-        {calendarWeeksofYear[weekNumber].map((week, index) => {
+        {calendarWeeksOfYear[weekNumber].map((week, index) => {
           return (
             <motion.button
               initial={{ y: -200 }}
@@ -110,7 +111,7 @@ export function CurrentWeek() {
             >
               <DayCard
                 className={cn(
-                  daySelected === week.format("DD") && "border-4 border-red-500"
+                  daySelected === week.format("DD") && "border-2 border-red-500"
                 )}
                 active={
                   week.isSame(dayjs(), "day") &&

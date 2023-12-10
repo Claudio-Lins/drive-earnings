@@ -1,4 +1,5 @@
 import { Summary } from "@/components/transaction/summary"
+import { WeekOverviewChart } from "@/components/transaction/week-overview-chart"
 import {
   getTransactionMonth,
   getTransactionToday,
@@ -27,17 +28,6 @@ export default async function Home() {
       amount: transaction.amount.toString(),
     })
   )
-
-  // const transaction = (
-  //   await prisma.transaction.findMany({
-  //     where: {
-  //       userId: session.user.id,
-  //     },
-  //   })
-  // ).map((transaction) => ({
-  //   ...transaction,
-  //   amount: transaction.amount.toString(),
-  // }))
 
   const transactionToday = (await getTransactionToday())
     .filter((transaction) => transaction.userId === session.user.id)
@@ -87,6 +77,9 @@ export default async function Home() {
         totalAmountWeek={totalAmount.weekIncome - totalAmount.weekExpense}
         totalAmountMonth={totalAmount.monthIncome - totalAmount.monthExpense}
       />
+      <div className="mt-32 lg:px-80">
+        <WeekOverviewChart transaction={transaction} />
+      </div>
     </main>
   )
 }

@@ -80,7 +80,7 @@ export function Summary({
         <span
           className={cn(
             "text-2xl lg:text-3xl font-bold",
-            todalDaily > todayExpense
+            todalDaily >= 0
               ? "bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text "
               : "text-red-500"
           )}
