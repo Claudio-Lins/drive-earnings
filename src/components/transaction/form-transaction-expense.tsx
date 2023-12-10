@@ -168,8 +168,12 @@ export function FormTransactionExpense({
             <Input
               type="text"
               id="amount"
-              className="w-full text-center text-4xl font-bold h-20 border-none text-blue-400 after:content-['€'] after:font-bold after:text-2xl after:m"
-              placeholder="00,00 €"
+              className={cn(
+                "w-full text-center text-4xl font-bold h-20 border-none text-blue-400 after:content-['€'] after:font-bold after:text-2xl after:mt-[-0.5rem]",
+                errors.amount &&
+                  "border-red-500 placeholder:text-red-500 font-bold"
+              )}
+              placeholder={errors.amount ? "digite um valor" : "0.00 €"}
               {...register("amount", {
                 setValueAs: (value) =>
                   typeof value === "string"
@@ -177,9 +181,6 @@ export function FormTransactionExpense({
                     : value,
               })}
             />
-            {errors.amount && (
-              <span className="text-red-500">{errors.amount.message}</span>
-            )}
           </div>
           <div className="flex flex-col items-center justify-center space-y-2 mt-4">
             <DatePicker setDate={setSelectedDate} />
@@ -191,13 +192,14 @@ export function FormTransactionExpense({
             <Input
               type="text"
               id="name"
-              className="w-full text-white"
-              placeholder="Descrição da transação"
+              className={cn(
+                "w-full text-white",
+                errors.name &&
+                  "border-red-500 placeholder:text-red-500 font-bold"
+              )}
+              placeholder={errors.name ? "digite uma descrição" : "Descrição"}
               {...register("name")}
             />
-            {errors.name && (
-              <span className="text-red-500">{errors.name.message}</span>
-            )}
           </div>
           <div className="flex w-full flex-col items-center justify-center space-y-2 mt-4">
             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
