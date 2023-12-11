@@ -3,11 +3,12 @@
 import dayjs from "dayjs"
 
 import { TransactionTypes } from "@/@types/transaction"
+import { useDateStore } from "@/context/dates-store"
 import { useSelectedDateStore } from "@/context/selescted-date-store"
 import "@/lib/dayjs"
 import "dayjs/locale/pt"
 import weekOfYear from "dayjs/plugin/weekOfYear"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
 dayjs.locale("pt")
@@ -18,40 +19,51 @@ interface WeekOverviewChartProps {
 }
 
 export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
+  const {
+    currentDate,
+    currentWeekNumber,
+    setCurrentDate,
+    setCurrentWeekNumber,
+    currentMonth,
+    currentYear,
+    setCurrentMonth,
+    handleNextMonth,
+    handlePreviousMonth,
+  } = useDateStore()
   const { daySelected, setDaySelected, monthSelected, setMonthSelected } =
     useSelectedDateStore()
-  const [currentDate, setCureentDate] = useState(() => {
-    return dayjs()
-  })
+  // const [currentDate, setCureentDate] = useState(() => {
+  //   return dayjs()
+  // })
 
-  const [weekNumber, setWeekNumber] = useState(() => {
-    return currentDate.week()
-  })
+  // const [weekNumber, setCurrentWeekNumber] = useState(() => {
+  //   return currentDate.week()
+  // })
 
-  const [currentMonth, setCurrentMonth] = useState(() => {
-    return currentDate.format("MMMM")
-  })
+  // const [currentMonth, setCurrentMonth] = useState(() => {
+  //   return currentDate.format("MMMM")
+  // })
 
-  function handlePreviousMonth() {
-    const previousMonthDate = currentDate.subtract(1, "month")
-    setCureentDate(previousMonthDate)
-  }
-  function handleNextMonth() {
-    const nextMonthDate = currentDate.add(1, "month")
-    setCureentDate(nextMonthDate)
-  }
+  // function handlePreviousMonth() {
+  //   const previousMonthDate = currentDate.subtract(1, "month")
+  //   setCureentDate(previousMonthDate)
+  // }
+  // function handleNextMonth() {
+  //   const nextMonthDate = currentDate.add(1, "month")
+  //   setCureentDate(nextMonthDate)
+  // }
 
-  function handlePreviousWeek() {
-    const previousWeekNumber = weekNumber - 1
-    setWeekNumber(previousWeekNumber)
-  }
+  // function handlePreviousWeek() {
+  //   const previousWeekNumber = weekNumber - 1
+  //   setCurrentWeekNumber(previousWeekNumber)
+  // }
 
-  function handleNextWeek() {
-    const nextWeekNumber = weekNumber + 1
-    setWeekNumber(nextWeekNumber)
-  }
+  // function handleNextWeek() {
+  //   const nextWeekNumber = weekNumber + 1
+  //   setCurrentWeekNumber(nextWeekNumber)
+  // }
 
-  const currentYear = currentDate.format("YYYY")
+  // const currentYear = currentDate.format("YYYY")
   const calendarWeeksOfYear = useMemo(() => {
     const firstDayOfYear = currentDate.startOf("year")
     const firstDayOfCalendar = firstDayOfYear.startOf("week")
@@ -72,10 +84,16 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
   }, [currentDate])
 
   useEffect(() => {
-    setCurrentMonth(calendarWeeksOfYear[weekNumber][0].format("MMMM"))
-    if (weekNumber === 52) setWeekNumber(0)
-    if (weekNumber === -1) setWeekNumber(51)
-  }, [calendarWeeksOfYear, currentDate, weekNumber])
+    setCurrentMonth(calendarWeeksOfYear[currentWeekNumber][0].format("MMMM"))
+    if (currentWeekNumber === 52) setCurrentWeekNumber(0)
+    if (currentWeekNumber === -1) setCurrentWeekNumber(51)
+  }, [
+    calendarWeeksOfYear,
+    currentDate,
+    setCurrentMonth,
+    setCurrentWeekNumber,
+    currentWeekNumber,
+  ])
 
   function getSelectedDate(dia: string, mes: string) {
     setDaySelected(dia)
@@ -84,7 +102,7 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
 
   const data = []
   for (let i = 0; i < 7; i++) {
-    const day = calendarWeeksOfYear[weekNumber][i]
+    const day = calendarWeeksOfYear[currentWeekNumber][i]
     const dayTransactions = transaction.filter((transaction) => {
       const transactionDate = dayjs(transaction.createdAt)
       return transactionDate.isSame(day, "day")

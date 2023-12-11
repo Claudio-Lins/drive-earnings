@@ -76,7 +76,7 @@ export function Summary({
       className="flex text-white max-h-40 w-full items-center justify-evenly gap-2 lg:px-32 fixed"
     >
       <div className="w-36 flex flex-col items-center justify-between space-y-4">
-        <small>Taday</small>
+        <small>Today</small>
         <span
           className={cn(
             "text-2xl lg:text-3xl font-bold",

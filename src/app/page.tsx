@@ -35,6 +35,7 @@ export default async function Home() {
       ...transaction,
       amount: transaction.amount.toString(),
     }))
+  // transactionWeek by week number
   const transactionWeek = (await getTransactionWeek())
     .filter((transaction) => transaction.userId === session.user.id)
     .map((transaction) => ({
