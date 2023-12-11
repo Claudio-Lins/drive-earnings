@@ -82,17 +82,6 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
     setMonthSelected(mes)
   }
 
-  // const startOfWeek = dayjs().startOf("week")
-  // const endOfWeek = dayjs().endOf("week")
-
-  // const currentWeekTransactions = transaction.filter((transaction) => {
-  //   const transactionDate = dayjs(transaction.createdAt)
-  //   return (
-  //     transactionDate.isAfter(startOfWeek) &&
-  //     transactionDate.isBefore(endOfWeek)
-  //   )
-  // })
-
   const data = []
   for (let i = 0; i < 7; i++) {
     const day = calendarWeeksOfYear[weekNumber][i]
@@ -131,9 +120,22 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `$${value.toFixed(2)}`}
+          spacing={2}
+          padding={{ top: 10 }}
         />
-        <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />
+        <Bar
+          dataKey="total"
+          fill="#adfa1d"
+          radius={[4, 4, 0, 0]}
+          label={{
+            position: "top",
+            fill: "#299edc",
+            fontSize: 12,
+            fontWeight: "bold",
+            formatter: (value: any) => `${value.toFixed(2)} €`,
+          }}
+        />
       </BarChart>
     </ResponsiveContainer>
   )

@@ -207,6 +207,12 @@ export function FormTransactionIncome({
               {...register("name")}
             />
           </div>
+          <div className="flex flex-col space-y-2">
+            <Label className="w-full text-zinc-50" htmlFor="paymentMethod">
+              Metodo de pagamento
+            </Label>
+            <TogglePaymentMethod setPaymentMethod={setPaymentMethod} />
+          </div>
           <div className="flex flex-col items-center justify-center space-y-2 mt-4">
             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger className="flex items-center gap-2">
@@ -281,14 +287,14 @@ export function FormTransactionIncome({
                       </Label>
                       <TogglePersonalCompany setEntity={setEntity} />
                     </div>
-                    <div className="flex flex-col space-y-2">
+                    {/* <div className="flex flex-col space-y-2">
                       <Label className="w-full text-zinc-950" htmlFor="entity">
                         Metodo de pagamento
                       </Label>
                       <TogglePaymentMethod
                         setPaymentMethod={setPaymentMethod}
                       />
-                    </div>
+                    </div> */}
                     <div className="flex flex-col space-y-2">
                       <Label className="w-full text-zinc-950" htmlFor="entity">
                         Recorrência

@@ -56,7 +56,7 @@ export function TogglePaymentMethod({
           className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-zinc-500 peer-checked:ring-1 peer-checked:ring-zinc-500 peer-checked:bg-zinc-950 peer-checked:text-zinc-50"
         >
           <div className="flex items-center justify-between">
-            <p className="uppercase text-xs md:text-sm peer-checked:text-zinc-50">
+            <p className="uppercase text-xs peer-checked:text-zinc-50">
               Dinheiro
             </p>
             {isCash && (
@@ -86,7 +86,7 @@ export function TogglePaymentMethod({
           className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-zinc-500 peer-checked:ring-1 peer-checked:ring-zinc-500 peer-checked:bg-zinc-950 peer-checked:text-zinc-50"
         >
           <div className="flex items-center justify-between">
-            <p className="uppercase text-xs md:text-sm peer-checked:text-zinc-50">
+            <p className="uppercase text-xs peer-checked:text-zinc-50">
               Crédito
             </p>
             {isCredit && (
@@ -116,7 +116,7 @@ export function TogglePaymentMethod({
           className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-zinc-500 peer-checked:ring-1 peer-checked:ring-zinc-500 peer-checked:bg-zinc-950 peer-checked:text-zinc-50"
         >
           <div className="flex items-center justify-between">
-            <p className="uppercase text-xs md:text-sm peer-checked:text-zinc-50">
+            <p className="uppercase text-xs peer-checked:text-zinc-50">
               Débito
             </p>
             {isDebit && (

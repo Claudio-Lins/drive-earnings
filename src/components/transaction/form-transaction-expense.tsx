@@ -201,6 +201,12 @@ export function FormTransactionExpense({
               {...register("name")}
             />
           </div>
+          <div className="flex flex-col space-y-2">
+            <Label className="w-full text-zinc-50" htmlFor="entity">
+              Metodo de pagamento
+            </Label>
+            <TogglePaymentMethod setPaymentMethod={setPaymentMethod} />
+          </div>
           <div className="flex w-full flex-col items-center justify-center space-y-2 mt-4">
             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger className="flex items-center gap-2">
@@ -274,14 +280,6 @@ export function FormTransactionExpense({
                         Tipo da transação
                       </Label>
                       <TogglePersonalCompany setEntity={setEntity} />
-                    </div>
-                    <div className="flex flex-col space-y-2">
-                      <Label className="w-full text-zinc-950" htmlFor="entity">
-                        Metodo de pagamento
-                      </Label>
-                      <TogglePaymentMethod
-                        setPaymentMethod={setPaymentMethod}
-                      />
                     </div>
                     <div className="flex flex-col space-y-2">
                       <Label className="w-full text-zinc-950" htmlFor="entity">
