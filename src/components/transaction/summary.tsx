@@ -1,8 +1,10 @@
 "use client"
 
 import { TransactionTypes } from "@/@types/transaction"
+import { useDateStore } from "@/context/dates-store"
 import { useSelectedDateStore } from "@/context/selescted-date-store"
 import { cn } from "@/lib/utils"
+import dayjs from "dayjs"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
@@ -35,6 +37,7 @@ export function Summary({
   totalAmountWeek,
   totalAmountMonth,
 }: SummaryProps) {
+  const { currentDate } = useDateStore()
   const { daySelected, monthSelected } = useSelectedDateStore()
   const [todayIncome, setTodayIncome] = useState(0)
   const [todayExpense, setTodayExpense] = useState(0)
@@ -76,7 +79,11 @@ export function Summary({
       className="flex text-white max-h-40 w-full items-center justify-evenly gap-2 lg:px-32 fixed"
     >
       <div className="w-36 flex flex-col items-center justify-between space-y-4">
-        <small>Today</small>
+        <small>
+          {daySelected === dayjs(currentDate).format("D")
+            ? "Today"
+            : `${daySelected}/${monthSelected}`}
+        </small>
         <span
           className={cn(
             "text-2xl lg:text-3xl font-bold",
