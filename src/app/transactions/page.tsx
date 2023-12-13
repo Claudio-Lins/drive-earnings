@@ -13,8 +13,6 @@ export default function TransactionsPage() {
     setCurrentWeekNumber,
     currentWeekNumber,
     currentYear,
-    handlePreviousMonth,
-    handleNextMonth,
     handleNextWeekNumber,
     handlePreviousWeekNumber,
   } = useDateStore()
