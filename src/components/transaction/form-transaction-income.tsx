@@ -25,7 +25,6 @@ import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
 import { ToastAction } from "../ui/toast"
 import { DatePicker } from "./date-picker"
-import { TogglePaymentMethod } from "./toggle-payment-method"
 import { TogglePersonalCompany } from "./toggle-personal-company"
 import { ToggleRecurrency } from "./toggle-recurrency"
 import { UploadRecive } from "./upload-recive"
@@ -211,7 +210,7 @@ export function FormTransactionIncome({
             <Label className="w-full text-zinc-50" htmlFor="paymentMethod">
               Metodo de pagamento
             </Label>
-            <TogglePaymentMethod setPaymentMethod={setPaymentMethod} />
+            {/* <TogglePaymentMethod setPaymentMethod={setPaymentMethod} /> */}
           </div>
           <div className="flex flex-col items-center justify-center space-y-2 mt-4">
             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>

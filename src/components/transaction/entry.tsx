@@ -23,8 +23,8 @@ export default function Entry() {
     useState<CategoryTypes | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [categories, setCategories] = useState([])
-  const [isIncome, setIsIncome] = useState(true)
-  const [isExpense, setIsExpense] = useState(false)
+  const [isIncome, setIsIncome] = useState(false)
+  const [isExpense, setIsExpense] = useState(true)
 
   useEffect(() => {
     fetch("/api/category")
@@ -54,7 +54,7 @@ export default function Entry() {
           </SheetClose>
         </SheetHeader>
         <Separator className="my-4" />
-        <Tabs defaultValue="income" className="w-full">
+        <Tabs defaultValue="expense" className="w-full">
           <TabsList className="grid w-full grid-cols-2 bg-zinc-700">
             <TabsTrigger
               className="bg-zinc-900 text-white font-bold"

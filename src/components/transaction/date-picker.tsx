@@ -23,7 +23,7 @@ export function DatePicker({ setDate }: DatePickerProps) {
     setDate(date)
   }, [date, setDate])
   return (
-    <>
+    <div className="w-full h-auto">
       <div className="w-full relative  lg:hidden flex flex-col space-y-2 cursor-pointer">
         <Label className="text-white">Date</Label>
         <input
@@ -63,6 +63,6 @@ export function DatePicker({ setDate }: DatePickerProps) {
           </PopoverContent>
         </Popover>
       </div>
-    </>
+    </div>
   )
 }

@@ -121,7 +121,6 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
         return acc - Number(transaction.amount)
       }
     }, 0)
-
     setTotalAmountMonth(total)
   }, [currentDate, transaction, setTotalAmountMonth])
 
@@ -181,7 +180,6 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
           />
         </BarChart>
       </ResponsiveContainer>
-      <p className="text-white text-2xl">{totalAmountMonth}</p>
     </>
   )
 }
