@@ -44,8 +44,6 @@ export function Resume({
     currentMonth,
     currentYear,
     setCurrentMonth,
-    handleNextMonth,
-    handlePreviousMonth,
   } = useDateStore()
   const {
     daySelected,
@@ -55,8 +53,13 @@ export function Resume({
     monthSelected,
     setMonthSelected,
   } = useSelectedDateStore()
-  const { setTotalAmountDay, totalAmountDay, totalAmountWeek } =
-    useTransactinsStore()
+  const {
+    setTotalAmountDay,
+    totalAmountDay,
+    totalAmountWeek,
+    setTotalAmountMonth,
+    totalAmountMonth,
+  } = useTransactinsStore()
 
   const calendarWeeksOfYear = useMemo(() => {
     const firstDayOfYear = currentDate.startOf("year")
@@ -99,6 +102,16 @@ export function Resume({
     setCurrentWeekNumber(nextWeekNumber)
   }
 
+  function handlePreviousMonth() {
+    const previousMonth = currentDate.subtract(1, "month")
+    setCurrentDate(previousMonth)
+  }
+
+  function handleNextMonth() {
+    const nextMonth = currentDate.add(1, "month")
+    setCurrentDate(nextMonth)
+  }
+
   function getSelectedDate(dia: string, mes: string) {
     setDaySelected(dia)
     setMonthSelected(mes)
@@ -134,6 +147,36 @@ export function Resume({
     setTodayIncome(todayIncome)
   }, [daySelected, transaction])
 
+  // totalAmountMonth
+  useEffect(() => {
+    console.log("useEffect triggered")
+    const startOfMonth = currentDate.startOf("month")
+    const endOfMonth = currentDate.endOf("month")
+    console.log("startOfMonth:", startOfMonth)
+    console.log("endOfMonth:", endOfMonth)
+    const transactionsInMonth = transaction.filter((transaction) => {
+      const transactionDate = dayjs(transaction.createdAt)
+      return (
+        transactionDate.isSameOrAfter(startOfMonth, "day") &&
+        transactionDate.isSameOrBefore(endOfMonth, "day")
+      )
+    })
+
+    const total = transactionsInMonth.reduce((acc, transaction) => {
+      if (transaction.type === "INCOME") {
+        return acc + Number(transaction.amount)
+      } else {
+        return acc - Number(transaction.amount)
+      }
+    }, 0)
+    console.log("total:", total)
+    setTotalAmountMonth(total)
+  }, [currentDate, transaction, setTotalAmountMonth, monthSelected])
+
+  useEffect(() => {
+    console.log("currentDate:", currentDate)
+  }, [currentDate])
+
   //
   const totalAmount = {
     todayIncome: transactionToday
@@ -168,7 +211,7 @@ export function Resume({
   ])
 
   const totalDaily = todayIncome - todayExpense
-  const totalDailyWeek = totalAmount.weekIncome - totalAmount.weekExpense
+  // const totalDailyWeek = totalAmount.weekIncome - totalAmount.weekExpense
   const totalDailyMonth = totalAmount.monthIncome - totalAmount.monthExpense
 
   return (
@@ -225,7 +268,7 @@ export function Resume({
           <button className="" onClick={handlePreviousWeek}>
             <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
           </button>
-          <p>{currentWeekNumber}</p>
+          {/* <p>{currentWeekNumber}</p> */}
           <button onClick={handleNextWeek}>
             <ChevronRight className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
           </button>
@@ -240,7 +283,7 @@ export function Resume({
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
           <small>
             {daySelected === dayjs(currentDate).format("D")
-              ? "Today"
+              ? "Hoje"
               : `${daySelected}/${monthSelected}`}
           </small>
           <span
@@ -258,7 +301,7 @@ export function Resume({
           </span>
         </div>
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
-          <small>Week</small>
+          <small>Semana {currentWeekNumber}</small>
           <span className="text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">
             {new Intl.NumberFormat("pt-PT", {
               style: "currency",
@@ -267,12 +310,22 @@ export function Resume({
           </span>
         </div>
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
-          <small>Month</small>
+          <div className="flex items-center justify-center gap-2">
+            <button onClick={handlePreviousMonth}>
+              <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
+            </button>
+            <small className="capitalize">
+              {dayjs(currentDate).format("MMMM")}
+            </small>
+            <button onClick={handleNextMonth}>
+              <ChevronRight className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
+            </button>
+          </div>
           <span className="text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">
             {new Intl.NumberFormat("pt-PT", {
               style: "currency",
               currency: "EUR",
-            }).format(totalDailyMonth)}
+            }).format(totalAmountMonth)}
           </span>
         </div>
       </motion.div>

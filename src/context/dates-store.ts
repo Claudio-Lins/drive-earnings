@@ -15,8 +15,6 @@ type DateStore = {
   setCurrentMonth: (month: string) => void
   currentYear: string
 
-  handlePreviousMonth: () => void
-  handleNextMonth: () => void
   handlePreviousWeekNumber: () => void
   handleNextWeekNumber: () => void
 }
@@ -32,14 +30,6 @@ export const useDateStore = create<DateStore>((set) => ({
   setCurrentWeekNumber: (currentWeekNumber) => set({ currentWeekNumber }),
   setCurrentMonth: (month) => set({ currentMonth: month }),
 
-  handlePreviousMonth: () => {
-    const previousMonthDate = dayjs().subtract(1, "month")
-    set({ currentDate: previousMonthDate })
-  },
-  handleNextMonth: () => {
-    const nextMonthDate = dayjs().add(1, "month")
-    set({ currentDate: nextMonthDate })
-  },
   handlePreviousWeekNumber: (weeks: number = 1) => {
     const previousWeekNumber = dayjs().subtract(weeks, "weeks")
     set({ weekNumber: previousWeekNumber.week() })

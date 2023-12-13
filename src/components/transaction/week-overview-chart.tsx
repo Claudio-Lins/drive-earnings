@@ -46,8 +46,6 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
     currentMonth,
     currentYear,
     setCurrentMonth,
-    handleNextMonth,
-    handlePreviousMonth,
   } = useDateStore()
   const { daySelected, setDaySelected, monthSelected, setMonthSelected } =
     useSelectedDateStore()
