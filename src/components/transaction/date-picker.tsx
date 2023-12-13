@@ -30,9 +30,10 @@ export function DatePicker({ setDate }: DatePickerProps) {
           type="date"
           value={date ? format(date, "yyyy-MM-dd") : ""}
           onChange={(e) => setDateState(new Date(e.target.value))}
+          placeholder="Date"
           className={cn(
-            "w-fulljustify-start text-left text-zinc-400 bg-transparent font-normal placeholder:text-red-500",
-            !date && "text-muted-foreground",
+            "w-fulljustify-start text-left text-zinc-400 bg-transparent font-normal h-10",
+            !date && "text-zinc-100",
             "border-2 border-gray-300 rounded-md p-1"
           )}
         />

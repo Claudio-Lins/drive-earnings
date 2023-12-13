@@ -15,13 +15,26 @@ import "@/lib/dayjs"
 import "dayjs/locale/pt"
 import weekOfYear from "dayjs/plugin/weekOfYear"
 import { useEffect, useMemo } from "react"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import {
+  Bar,
+  BarChart,
+  Cell,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 dayjs.locale("pt")
 dayjs.extend(weekOfYear)
 
 interface WeekOverviewChartProps {
   transaction: TransactionTypes[]
+  data: DataTypes[]
+}
+
+interface DataTypes {
+  name: string
+  total: number
 }
 
 export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
@@ -124,7 +137,7 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
     setTotalAmountMonth(total)
   }, [currentDate, transaction, setTotalAmountMonth])
 
-  const data = []
+  const data = [] as DataTypes[]
   for (let i = 0; i < 7; i++) {
     const day = calendarWeeksOfYear[currentWeekNumber][i]
     const dayTransactions = transaction.filter((transaction) => {
@@ -168,16 +181,22 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
           />
           <Bar
             dataKey="total"
-            fill="#adfa1d"
             radius={[4, 4, 0, 0]}
             label={{
               position: "top",
-              fill: "#299edc",
+              fill: "#6bbfec",
               fontSize: 12,
               fontWeight: "bold",
               formatter: (value: any) => `${value.toFixed(2)} €`,
             }}
-          />
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={entry.total < 0 ? "red" : "#adfa1d"}
+              />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </>
