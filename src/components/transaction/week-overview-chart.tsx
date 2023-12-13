@@ -29,7 +29,7 @@ dayjs.extend(weekOfYear)
 
 interface WeekOverviewChartProps {
   transaction: TransactionTypes[]
-  data: DataTypes[]
+  data?: DataTypes[]
 }
 
 interface DataTypes {
