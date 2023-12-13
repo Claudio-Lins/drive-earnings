@@ -39,8 +39,13 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
   const { daySelected, setDaySelected, monthSelected, setMonthSelected } =
     useSelectedDateStore()
 
-  const { totalAmountDay, setTotalAmountWeek, totalAmountWeek } =
-    useTransactinsStore()
+  const {
+    totalAmountDay,
+    setTotalAmountWeek,
+    totalAmountWeek,
+    setTotalAmountMonth,
+    totalAmountMonth,
+  } = useTransactinsStore()
 
   // const currentYear = currentDate.format("YYYY")
   const calendarWeeksOfYear = useMemo(() => {
@@ -74,6 +79,7 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
     currentWeekNumber,
   ])
 
+  // totalAmountWeek
   useEffect(() => {
     const startOfWeek = calendarWeeksOfYear[currentWeekNumber][0]
     const endOfWeek = calendarWeeksOfYear[currentWeekNumber][6]
@@ -96,10 +102,28 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
     setTotalAmountWeek(total)
   }, [calendarWeeksOfYear, currentWeekNumber, transaction, setTotalAmountWeek])
 
-  // function getSelectedDate(dia: string, mes: string) {
-  //   setDaySelected(dia)
-  //   setMonthSelected(mes)
-  // }
+  // totalAmountMonth
+  useEffect(() => {
+    const startOfMonth = currentDate.startOf("month")
+    const endOfMonth = currentDate.endOf("month")
+    const transactionsInMonth = transaction.filter((transaction) => {
+      const transactionDate = dayjs(transaction.createdAt)
+      return (
+        transactionDate.isSameOrAfter(startOfMonth, "day") &&
+        transactionDate.isSameOrBefore(endOfMonth, "day")
+      )
+    })
+
+    const total = transactionsInMonth.reduce((acc, transaction) => {
+      if (transaction.type === "INCOME") {
+        return acc + Number(transaction.amount)
+      } else {
+        return acc - Number(transaction.amount)
+      }
+    }, 0)
+
+    setTotalAmountMonth(total)
+  }, [currentDate, transaction, setTotalAmountMonth])
 
   const data = []
   for (let i = 0; i < 7; i++) {
@@ -157,7 +181,7 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
           />
         </BarChart>
       </ResponsiveContainer>
-      {/* <p className="text-white text-2xl">{totalAmountWeek}</p> */}
+      <p className="text-white text-2xl">{totalAmountMonth}</p>
     </>
   )
 }
