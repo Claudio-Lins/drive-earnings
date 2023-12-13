@@ -1,6 +1,5 @@
 import { Footer } from "@/components/Footer"
 import { Profile } from "@/components/auth/Profile"
-import { CurrentWeek } from "@/components/dates/CurrentWeek"
 import { Toaster } from "@/components/ui/toaster"
 import { authOptions } from "@/lib/auth"
 import { cn } from "@/lib/utils"
@@ -31,7 +30,6 @@ export default async function RootLayout({
         <AuthProvider>
           <main className="pt-4">
             <Profile />
-            {session && <CurrentWeek />}
             {children}
             <Footer session={session} />
             <Toaster />

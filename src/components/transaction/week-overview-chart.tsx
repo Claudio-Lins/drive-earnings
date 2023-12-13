@@ -1,10 +1,16 @@
 "use client"
 
 import dayjs from "dayjs"
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
+
+dayjs.extend(isSameOrAfter)
+dayjs.extend(isSameOrBefore)
 
 import { TransactionTypes } from "@/@types/transaction"
 import { useDateStore } from "@/context/dates-store"
 import { useSelectedDateStore } from "@/context/selescted-date-store"
+import { useTransactinsStore } from "@/context/transactions-store"
 import "@/lib/dayjs"
 import "dayjs/locale/pt"
 import weekOfYear from "dayjs/plugin/weekOfYear"
@@ -32,36 +38,9 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
   } = useDateStore()
   const { daySelected, setDaySelected, monthSelected, setMonthSelected } =
     useSelectedDateStore()
-  // const [currentDate, setCureentDate] = useState(() => {
-  //   return dayjs()
-  // })
 
-  // const [weekNumber, setCurrentWeekNumber] = useState(() => {
-  //   return currentDate.week()
-  // })
-
-  // const [currentMonth, setCurrentMonth] = useState(() => {
-  //   return currentDate.format("MMMM")
-  // })
-
-  // function handlePreviousMonth() {
-  //   const previousMonthDate = currentDate.subtract(1, "month")
-  //   setCureentDate(previousMonthDate)
-  // }
-  // function handleNextMonth() {
-  //   const nextMonthDate = currentDate.add(1, "month")
-  //   setCureentDate(nextMonthDate)
-  // }
-
-  // function handlePreviousWeek() {
-  //   const previousWeekNumber = weekNumber - 1
-  //   setCurrentWeekNumber(previousWeekNumber)
-  // }
-
-  // function handleNextWeek() {
-  //   const nextWeekNumber = weekNumber + 1
-  //   setCurrentWeekNumber(nextWeekNumber)
-  // }
+  const { totalAmountDay, setTotalAmountWeek, totalAmountWeek } =
+    useTransactinsStore()
 
   // const currentYear = currentDate.format("YYYY")
   const calendarWeeksOfYear = useMemo(() => {
@@ -85,7 +64,7 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
 
   useEffect(() => {
     setCurrentMonth(calendarWeeksOfYear[currentWeekNumber][0].format("MMMM"))
-    if (currentWeekNumber === 52) setCurrentWeekNumber(0)
+    if (currentWeekNumber === 53) setCurrentWeekNumber(0)
     if (currentWeekNumber === -1) setCurrentWeekNumber(51)
   }, [
     calendarWeeksOfYear,
@@ -95,10 +74,32 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
     currentWeekNumber,
   ])
 
-  function getSelectedDate(dia: string, mes: string) {
-    setDaySelected(dia)
-    setMonthSelected(mes)
-  }
+  useEffect(() => {
+    const startOfWeek = calendarWeeksOfYear[currentWeekNumber][0]
+    const endOfWeek = calendarWeeksOfYear[currentWeekNumber][6]
+    const transactionsInWeek = transaction.filter((transaction) => {
+      const transactionDate = dayjs(transaction.createdAt)
+      return (
+        transactionDate.isSameOrAfter(startOfWeek, "day") &&
+        transactionDate.isSameOrBefore(endOfWeek, "day")
+      )
+    })
+
+    const total = transactionsInWeek.reduce((acc, transaction) => {
+      if (transaction.type === "INCOME") {
+        return acc + Number(transaction.amount)
+      } else {
+        return acc - Number(transaction.amount)
+      }
+    }, 0)
+
+    setTotalAmountWeek(total)
+  }, [calendarWeeksOfYear, currentWeekNumber, transaction, setTotalAmountWeek])
+
+  // function getSelectedDate(dia: string, mes: string) {
+  //   setDaySelected(dia)
+  //   setMonthSelected(mes)
+  // }
 
   const data = []
   for (let i = 0; i < 7; i++) {
@@ -121,40 +122,42 @@ export function WeekOverviewChart({ transaction }: WeekOverviewChartProps) {
       total,
     })
   }
-  console.log(data)
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data}>
-        <XAxis
-          dataKey="name"
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
-        <YAxis
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={(value) => `$${value.toFixed(2)}`}
-          spacing={2}
-          padding={{ top: 10 }}
-        />
-        <Bar
-          dataKey="total"
-          fill="#adfa1d"
-          radius={[4, 4, 0, 0]}
-          label={{
-            position: "top",
-            fill: "#299edc",
-            fontSize: 12,
-            fontWeight: "bold",
-            formatter: (value: any) => `${value.toFixed(2)} €`,
-          }}
-        />
-      </BarChart>
-    </ResponsiveContainer>
+    <>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={data}>
+          <XAxis
+            dataKey="name"
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <YAxis
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => `$${value.toFixed(2)}`}
+            spacing={2}
+            padding={{ top: 10 }}
+          />
+          <Bar
+            dataKey="total"
+            fill="#adfa1d"
+            radius={[4, 4, 0, 0]}
+            label={{
+              position: "top",
+              fill: "#299edc",
+              fontSize: 12,
+              fontWeight: "bold",
+              formatter: (value: any) => `${value.toFixed(2)} €`,
+            }}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+      {/* <p className="text-white text-2xl">{totalAmountWeek}</p> */}
+    </>
   )
 }

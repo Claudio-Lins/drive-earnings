@@ -8,23 +8,6 @@ import dayjs from "dayjs"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
-// interface TransactionTypes {
-//   id: string
-//   type: TransactionType
-//   entity: string
-//   paymentMethod: string
-//   recurring: string | null
-//   name: string
-//   amount: string
-//   location: string | null
-//   notes: string | null
-//   receipt: string | null
-//   bankAccount: string | null
-//   userId: string | null
-//   categoryId: string | null
-//   createdAt: Date
-// }
-
 interface SummaryProps {
   transactionToday: TransactionTypes[]
   transaction: TransactionTypes[]
@@ -38,7 +21,7 @@ export function Summary({
   totalAmountMonth,
 }: SummaryProps) {
   const { currentDate } = useDateStore()
-  const { daySelected, monthSelected } = useSelectedDateStore()
+  const { daySelected, weekSelected, monthSelected } = useSelectedDateStore()
   const [todayIncome, setTodayIncome] = useState(0)
   const [todayExpense, setTodayExpense] = useState(0)
 

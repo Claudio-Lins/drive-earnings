@@ -1,84 +1,41 @@
-import { Summary } from "@/components/transaction/summary"
+import { Resume } from "@/components/transaction/resume"
 import { WeekOverviewChart } from "@/components/transaction/week-overview-chart"
 import {
   getTransactionMonth,
   getTransactionToday,
   getTransactionWeek,
+  getTrasactionByUserId,
 } from "@/data/transactionsServices"
 import { authOptions } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import dayjs from "dayjs"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 
-async function getTrasactionByUserId(userId: string) {
-  return await prisma.transaction.findMany({
-    where: {
-      userId,
-    },
-  })
-}
-
 export default async function Home() {
+  const startOfWeek = dayjs().startOf("week").toDate()
+  const endOfWeek = dayjs().endOf("week").toDate()
   const session = await getServerSession(authOptions)
   if (!session) redirect("/signin")
-
-  const transaction = (await getTrasactionByUserId(session.user.id)).map(
-    (transaction) => ({
-      ...transaction,
-      amount: transaction.amount.toString(),
-    })
+  const transaction = await getTrasactionByUserId(session.user.id)
+  const transactionToday = await getTransactionToday(session.user.id)
+  const transactionWeek = await getTransactionWeek(
+    session.user.id,
+    startOfWeek,
+    endOfWeek
   )
-
-  const transactionToday = (await getTransactionToday())
-    .filter((transaction) => transaction.userId === session.user.id)
-    .map((transaction) => ({
-      ...transaction,
-      amount: transaction.amount.toString(),
-    }))
-  // transactionWeek by week number
-  const transactionWeek = (await getTransactionWeek())
-    .filter((transaction) => transaction.userId === session.user.id)
-    .map((transaction) => ({
-      ...transaction,
-      amount: transaction.amount.toString(),
-    }))
-  const transactionMonth = (await getTransactionMonth())
-    .filter((transaction) => transaction.userId === session.user.id)
-    .map((transaction) => ({
-      ...transaction,
-      amount: transaction.amount.toString(),
-    }))
-
-  const totalAmount = {
-    todayIncome: transactionToday
-      .filter((transaction) => transaction.type === "INCOME")
-      .reduce((acc, curr) => acc + Number(curr.amount), 0),
-    todayExpense: transactionToday
-      .filter((transaction) => transaction.type === "EXPENSE")
-      .reduce((acc, curr) => acc + Number(curr.amount), 0),
-    weekIncome: transactionWeek
-      .filter((transaction) => transaction.type === "INCOME")
-      .reduce((acc, curr) => acc + Number(curr.amount), 0),
-    weekExpense: transactionWeek
-      .filter((transaction) => transaction.type === "EXPENSE")
-      .reduce((acc, curr) => acc + Number(curr.amount), 0),
-    monthIncome: transactionMonth
-      .filter((transaction) => transaction.type === "INCOME")
-      .reduce((acc, curr) => acc + Number(curr.amount), 0),
-    monthExpense: transactionMonth
-      .filter((transaction) => transaction.type === "EXPENSE")
-      .reduce((acc, curr) => acc + Number(curr.amount), 0),
-  }
+  const transactionMonth = await getTransactionMonth(session.user.id)
 
   return (
-    <main className="pt-48 lg:pt-56">
-      <Summary
-        transactionToday={transactionToday}
+    <main className="">
+      <Resume
         transaction={transaction}
-        totalAmountWeek={totalAmount.weekIncome - totalAmount.weekExpense}
-        totalAmountMonth={totalAmount.monthIncome - totalAmount.monthExpense}
+        transactionToday={transactionToday}
+        transactionWeek={transactionWeek}
+        transactionMonth={transactionMonth}
+        startOfWeek={startOfWeek}
+        endOfWeek={endOfWeek}
       />
-      <div className="mt-32 lg:px-80">
+      <div className="mt-20 lg:px-80">
         <WeekOverviewChart transaction={transaction} />
       </div>
     </main>
