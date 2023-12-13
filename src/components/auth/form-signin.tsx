@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signIn, signOut } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -52,9 +52,6 @@ export function FormSignin() {
         <Input type="password" {...register("password")} />
       </div>
       <Button type="submit">Entrar</Button>
-      <Button onClick={() => signOut()} type="button">
-        Sair
-      </Button>
     </form>
   )
 }

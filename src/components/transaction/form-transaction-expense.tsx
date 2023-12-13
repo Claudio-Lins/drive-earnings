@@ -67,7 +67,7 @@ export function FormTransactionExpense({
   setIsExpense,
   setIsIncome,
 }: TransactioFormProps) {
-  const { categories } = useCategoryStore()
+  const { categories, setCategories } = useCategoryStore()
   const [localCategories, setLocalCategories] = useState(categories)
   const [isSheetOpen, setSheetOpen] = useState(false)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
@@ -111,6 +111,12 @@ export function FormTransactionExpense({
     setIsExpense(true)
     setIsIncome(false)
   }, [setIsExpense, setIsIncome])
+
+  useEffect(() => {
+    fetch("/api/category")
+      .then((res) => res.json())
+      .then((json) => setCategories(json))
+  }, [setCategories])
 
   useEffect(() => {
     setLocalCategories(categories)
