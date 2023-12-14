@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import dayjs from "dayjs"
 import weekOfYear from "dayjs/plugin/weekOfYear"
 import { motion } from "framer-motion"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { CheckCircleIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useEffect, useMemo, useState } from "react"
 import { DayCard } from "../dates/DayCard"
@@ -245,9 +245,13 @@ export function Resume({
     monthlyGoal,
   ])
 
+  const goalDaylyPercent = Math.round((totalAmountDay / daylyGoal) * 100)
+  const goalWeeklyPercent = Math.round((totalAmountWeek / weeklyGoal) * 100)
+  const goalMonthlyPercent = Math.round((totalAmountMonth / monthlyGoal) * 100)
+
   return (
-    <div className="flex flex-col space-y-8">
-      <div className="mx-auto w-full flex flex-col space-y-4 items-center mt-4  bg-transparent text-white">
+    <div className="flex flex-col space-y-6">
+      <div className="mx-auto w-full flex flex-col space-y-3 items-center mt-4  bg-transparent text-white">
         <motion.div
           initial={{ y: -200 }}
           animate={{ y: 0 }}
@@ -309,7 +313,7 @@ export function Resume({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 3.5 }}
-        className="flex text-white max-h-40 w-full items-center justify-evenly gap-2 lg:px-32"
+        className="flex text-white max-h-40 w-full items-center justify-evenly lg:px-32"
       >
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
           <small>
@@ -330,10 +334,19 @@ export function Resume({
               currency: "EUR",
             }).format(totalAmountDay)}
           </span>
-          <Progress
-            value={100 - progressDayly}
-            className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
-          />
+          <div className="flex items-center space-x-1 w-full">
+            <Progress
+              value={100 - progressDayly}
+              className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
+            />
+            {goalDaylyPercent >= 100 ? (
+              <CheckCircleIcon className="w-4 h-4 text-green-500" />
+            ) : (
+              <span className="text-white text-[10px]">
+                {goalDaylyPercent}%
+              </span>
+            )}
+          </div>
         </div>
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
           <small>Semana {currentWeekNumber}</small>
@@ -343,10 +356,19 @@ export function Resume({
               currency: "EUR",
             }).format(totalAmountWeek)}
           </span>
-          <Progress
-            value={100 - progressWeek}
-            className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
-          />
+          <div className="flex items-center space-x-1 w-full">
+            <Progress
+              value={100 - progressWeek}
+              className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
+            />
+            {goalWeeklyPercent >= 100 ? (
+              <CheckCircleIcon className="w-4 h-4 text-green-500" />
+            ) : (
+              <span className="text-white text-[10px]">
+                {goalWeeklyPercent}%
+              </span>
+            )}
+          </div>
         </div>
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
           <div className="flex items-center justify-center gap-2">
@@ -366,10 +388,19 @@ export function Resume({
               currency: "EUR",
             }).format(totalAmountMonth)}
           </span>
-          <Progress
-            value={100 - progressMonth}
-            className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
-          />
+          <div className="flex items-center space-x-1 w-full">
+            <Progress
+              value={100 - progressMonth}
+              className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
+            />
+            {goalMonthlyPercent >= 100 ? (
+              <CheckCircleIcon className="w-4 h-4 text-green-500" />
+            ) : (
+              <span className="text-white text-[10px]">
+                {goalMonthlyPercent}%
+              </span>
+            )}
+          </div>
         </div>
       </motion.div>
     </div>

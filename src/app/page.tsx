@@ -35,7 +35,7 @@ export default async function Home() {
         startOfWeek={startOfWeek}
         endOfWeek={endOfWeek}
       />
-      <div className="mt-20 lg:px-80">
+      <div className="mt-10 lg:px-80">
         <WeekOverviewChart transaction={transaction} />
       </div>
     </main>
