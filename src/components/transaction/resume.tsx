@@ -12,6 +12,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useEffect, useMemo, useState } from "react"
 import { DayCard } from "../dates/DayCard"
+import { Progress } from "../ui/progress"
 
 dayjs.extend(weekOfYear)
 
@@ -34,7 +35,11 @@ export function Resume({
   startOfWeek,
   endOfWeek,
 }: ResumeProps) {
-  const session = useSession()
+  const { data: session } = useSession()
+  const daylyGoal = Number(session?.user?.daylyGoal)
+  const weeklyGoal = Number(session?.user?.weeklyGoal)
+  const monthlyGoal = Number(session?.user?.monthlyGoal)
+
   const [totalDay, setTotalDay] = useState(0)
   const {
     currentDate,
@@ -214,6 +219,32 @@ export function Resume({
   // const totalDailyWeek = totalAmount.weekIncome - totalAmount.weekExpense
   const totalDailyMonth = totalAmount.monthIncome - totalAmount.monthExpense
 
+  // PROGRESS BAR
+  const [progressDayly, setProgressDayly] = useState(
+    (totalAmountDay / daylyGoal) * 100 || 0
+  )
+  const [progressWeek, setProgressWeek] = useState(
+    (totalAmountWeek / weeklyGoal) * 100 || 0
+  )
+  const [progressMonth, setProgressMonth] = useState(
+    (totalDailyMonth / monthlyGoal) * 100 || 0
+  )
+  useEffect(() => {
+    const newProgressDayly = (totalAmountDay / daylyGoal) * 100
+    setProgressDayly(Math.max(0, Math.min(newProgressDayly, 100)))
+    const newProgressWeek = (totalAmountWeek / weeklyGoal) * 100
+    setProgressWeek(Math.max(0, Math.min(newProgressWeek, 100)))
+    const newProgressMonth = (totalAmountMonth / monthlyGoal) * 100
+    setProgressMonth(Math.max(0, Math.min(newProgressMonth, 100)))
+  }, [
+    totalAmountDay,
+    daylyGoal,
+    totalAmountWeek,
+    weeklyGoal,
+    totalAmountMonth,
+    monthlyGoal,
+  ])
+
   return (
     <div className="flex flex-col space-y-8">
       <div className="mx-auto w-full flex flex-col space-y-4 items-center mt-4  bg-transparent text-white">
@@ -299,6 +330,10 @@ export function Resume({
               currency: "EUR",
             }).format(totalAmountDay)}
           </span>
+          <Progress
+            value={100 - progressDayly}
+            className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
+          />
         </div>
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
           <small>Semana {currentWeekNumber}</small>
@@ -308,6 +343,10 @@ export function Resume({
               currency: "EUR",
             }).format(totalAmountWeek)}
           </span>
+          <Progress
+            value={100 - progressWeek}
+            className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
+          />
         </div>
         <div className="w-36 flex flex-col items-center justify-between space-y-4">
           <div className="flex items-center justify-center gap-2">
@@ -327,6 +366,10 @@ export function Resume({
               currency: "EUR",
             }).format(totalAmountMonth)}
           </span>
+          <Progress
+            value={100 - progressMonth}
+            className="rotate-180 bg-gradient-to-l border border-zinc-600 from-purple-600 to-pink-500"
+          />
         </div>
       </motion.div>
     </div>

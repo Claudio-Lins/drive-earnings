@@ -43,6 +43,9 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
+  daylyGoal      Int?          @default(120)
+  weeklyGoal     Int?          @default(600)
+  monthlyGoal    Int?          @default(2400)
   accounts       Account[]
   sessions       Session[]
   Transaction    Transaction[]

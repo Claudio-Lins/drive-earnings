@@ -52,6 +52,9 @@ export const authOptions: NextAuthOptions = {
           email: existingUser.email,
           image: existingUser.image,
           role: existingUser.role,
+          daylyGoal: existingUser.daylyGoal,
+          weeklyGoal: existingUser.weeklyGoal,
+          monthlyGoal: existingUser.monthlyGoal,
         }
       },
     }),
@@ -75,6 +78,9 @@ export const authOptions: NextAuthOptions = {
           image: token.image as string | null | undefined,
           picture: token.picture,
           role: token.role,
+          daylyGoal: token.daylyGoal,
+          weeklyGoal: token.weeklyGoal,
+          monthlyGoal: token.monthlyGoal,
         },
       }
     },
