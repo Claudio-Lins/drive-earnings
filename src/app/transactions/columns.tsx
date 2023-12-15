@@ -86,6 +86,7 @@ export const columns: ColumnDef<Transaction>[] = [
           },
           body: JSON.stringify({ id }),
         })
+        window.location.reload()
       }
 
       return (
@@ -102,7 +103,7 @@ export const columns: ColumnDef<Transaction>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => handleDelete(transaction.id)}>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 cursor-pointer">
                 <Trash2 className="h-4 w-4" />
                 <span>Delete</span>
               </div>

@@ -19,10 +19,7 @@ export function Footer({ session }: FooterProps) {
   // pathName
   const pathName = usePathname()
   return (
-    <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, delay: 2.5 }}
+    <div
       className={cn(
         "fixed bottom-0 bg-white backdrop-blur w-full h-14 rounded-b-xl flex items-center p-2 justify-center",
         !session?.user && "hidden"
@@ -69,6 +66,6 @@ export function Footer({ session }: FooterProps) {
           />
         </Link>
       </motion.div>
-    </motion.div>
+    </div>
   )
 }
