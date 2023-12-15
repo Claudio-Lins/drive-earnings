@@ -1,73 +1,37 @@
-import { Payment, columns } from "./columns"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
+import { Transaction, columns } from "./columns"
 import { DataTable } from "./data-table"
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
+async function getTransaction(userId: string): Promise<Transaction[]> {
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId: userId,
     },
-    {
-      id: "728ed53f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
+    orderBy: {
+      createdAt: "desc",
     },
-    {
-      id: "728ed51f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
+    include: {
+      category: true,
     },
-    {
-      id: "728ed51f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed31f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed41f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed61f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "748ed61f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "725ed61f",
-      amount: 300,
-      status: "pending",
-      email: "m@example.com",
-    },
-    // ...
-  ]
+  })
+  return transactions.map((transaction) => ({
+    ...transaction,
+    amount: transaction.amount.toNumber(),
+    categoryName: transaction.category ? transaction.category.name : null,
+  }))
 }
 
 export default async function TransactionsPage() {
-  const data = await getData()
+  const session = await getServerSession(authOptions)
+  if (!session) redirect("/signin")
+  const transaction = await getTransaction(session.user.id)
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={transaction} />
     </div>
   )
 }

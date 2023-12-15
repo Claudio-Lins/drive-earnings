@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 import { Home, Receipt } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import Entry from "./transaction/entry"
 // import { SignOutBtn } from "./SignOutBtn"
 
@@ -15,6 +16,8 @@ interface FooterProps {
 }
 
 export function Footer({ session }: FooterProps) {
+  // pathName
+  const pathName = usePathname()
   return (
     <motion.div
       initial={{ y: 100 }}
@@ -52,9 +55,18 @@ export function Footer({ session }: FooterProps) {
         </div> */}
         <Link
           href="/transactions"
-          className=" rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10"
+          className={cn(
+            "rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10",
+            pathName === "/transactions" &&
+              "bg-gradient-to-r from-violet-600 to-red-500"
+          )}
         >
-          <Receipt className="w-8 h-8 font-medium " />
+          <Receipt
+            className={cn(
+              "w-8 h-8 font-medium ",
+              pathName === "/transactions" && "text-white"
+            )}
+          />
         </Link>
       </motion.div>
     </motion.div>

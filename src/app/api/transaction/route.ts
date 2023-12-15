@@ -79,3 +79,40 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Erro ao criar/atualizar transação" })
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  const body = await request.json()
+
+  try {
+    const transaction = await prisma.transaction.delete({
+      where: {
+        id: body.id,
+      },
+    })
+
+    return NextResponse.json(transaction)
+  } catch (error) {
+    console.error("Error details:", error)
+    return NextResponse.json({ message: "Erro ao deletar transação" })
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  const body = await request.json()
+
+  try {
+    const transaction = await prisma.transaction.update({
+      where: {
+        id: body.id,
+      },
+      data: {
+        ...body,
+      },
+    })
+
+    return NextResponse.json(transaction)
+  } catch (error) {
+    console.error("Error details:", error)
+    return NextResponse.json({ message: "Erro ao atualizar transação" })
+  }
+}

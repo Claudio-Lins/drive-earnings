@@ -63,12 +63,12 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter descrição..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm text-neutral-50"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
-                      className="px-6 py-3 text-left text-base font-bold text-zinc-50 uppercase tracking-wider "
+                      className="px-6 py-3 text-left text-sm font-bold text-zinc-50 uppercase tracking-wider "
                       key={header.id}
                     >
                       {header.isPlaceholder

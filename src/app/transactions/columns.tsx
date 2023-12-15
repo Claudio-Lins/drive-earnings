@@ -1,5 +1,4 @@
 "use client"
-
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,39 +9,60 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import dayjs from "dayjs"
+import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react"
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
+export type Transaction = {
   id: string
+  name: string
+  categoryId: string | null
+  categoryName: string | null
+  type: string
+  paymentMethod: string | null
   amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+  createdAt: Date
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
+    accessorKey: "createdAt",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Data
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
+    cell: ({ row }) => {
+      const date = row.getValue("createdAt") as Date
+      const formattedDate = dayjs(date).format("DD/MM/YYYY")
+
+      return <div>{formattedDate}</div>
+    },
+  },
+  {
+    accessorKey: "name",
+    header: "Descritivo",
+  },
+  {
+    accessorKey: "type",
+    header: "Tipo",
+  },
+  {
+    accessorKey: "paymentMethod",
+    header: "Pagamento",
+  },
+  {
+    accessorKey: "categoryName",
+    header: "Categoria",
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: () => <div className="text-right">Valor</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"))
       const formatted = new Intl.NumberFormat("pt-PT", {
@@ -56,22 +76,36 @@ export const columns: ColumnDef<Payment>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original
+      const transaction = row.original
+
+      async function handleDelete(id: string) {
+        await fetch(`/api/transaction`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        })
+      }
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 flex items-center gap-1"
+            >
+              <span className="sr-only"></span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
+            <DropdownMenuItem onClick={() => handleDelete(transaction.id)}>
+              <div className="flex items-center gap-2">
+                <Trash2 className="h-4 w-4" />
+                <span>Delete</span>
+              </div>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
