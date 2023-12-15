@@ -5,6 +5,8 @@
 // import { UseAccountNav } from "./UseAccountNav"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
+import { Home, Receipt } from "lucide-react"
+import Link from "next/link"
 import Entry from "./transaction/entry"
 // import { SignOutBtn } from "./SignOutBtn"
 
@@ -29,6 +31,12 @@ export function Footer({ session }: FooterProps) {
         transition={{ duration: 0.5, delay: 3 }}
         className="flex items-center justify-evenly px-2 gap-2 w-full max-w-md"
       >
+        <Link
+          href="/"
+          className=" rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10"
+        >
+          <Home className="w-8 h-8 font-medium " />
+        </Link>
         <Entry />
         {/* <button className=" rounded-full flex items-center justify-center p-2 ">
           <Fuel className="w-6 h-6 font-medium " />
@@ -42,12 +50,12 @@ export function Footer({ session }: FooterProps) {
             </Link>
           )}
         </div> */}
-        {/* <Link
-          href="/new-transaction"
-          className=" rounded-full flex items-center shadow-md bg-white justify-center p-2 -mt-10"
+        <Link
+          href="/transactions"
+          className=" rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10"
         >
-          <PlusCircle className="w-12 h-12 font-medium " />
-        </Link> */}
+          <Receipt className="w-8 h-8 font-medium " />
+        </Link>
       </motion.div>
     </motion.div>
   )

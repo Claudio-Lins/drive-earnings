@@ -1,41 +1,73 @@
-"use client"
+import { Payment, columns } from "./columns"
+import { DataTable } from "./data-table"
 
-import { useDateStore } from "@/context/dates-store"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useState } from "react"
+async function getData(): Promise<Payment[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed53f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed51f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed51f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed31f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed41f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed61f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "748ed61f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "725ed61f",
+      amount: 300,
+      status: "pending",
+      email: "m@example.com",
+    },
+    // ...
+  ]
+}
 
-export default function TransactionsPage() {
-  const [previousWeek, setPreviousWeek] = useState(0)
-  const {
-    currentDate,
-    weekNumber,
-    currentMonth,
-    setCurrentWeekNumber,
-    currentWeekNumber,
-    currentYear,
-    handleNextWeekNumber,
-    handlePreviousWeekNumber,
-  } = useDateStore()
-
-  function handlePreviousWeek() {
-    const previousWeekNumber = currentWeekNumber - 1
-    setCurrentWeekNumber(previousWeekNumber)
-  }
+export default async function TransactionsPage() {
+  const data = await getData()
 
   return (
-    <div className="text-white text-2xl mt-80 flex w-full items-center justify-center gap-10">
-      <button className="" onClick={handlePreviousWeek}>
-        <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-50" />
-      </button>
-      <div className=" ">
-        <div className="capitalize flex flex-col font-semibold text-xl text-zinc-100">
-          {currentWeekNumber}
-        </div>
-        <span className="text-zinc-400"> {}</span>
-      </div>
-      <button onClick={handleNextWeekNumber}>
-        <ChevronRight className="w-8 h-8 hover:text-zinc-800 text-zinc-50" />
-      </button>
+    <div className="container mx-auto py-10">
+      <DataTable columns={columns} data={data} />
     </div>
   )
 }
