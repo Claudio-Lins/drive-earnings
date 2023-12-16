@@ -33,9 +33,17 @@ export function Footer({ session }: FooterProps) {
       >
         <Link
           href="/"
-          className=" rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10"
+          className={cn(
+            "rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10 w-12 h-12",
+            pathName === "/" && "bg-gradient-to-r from-violet-600 to-red-500"
+          )}
         >
-          <Home className="w-8 h-8 font-medium " />
+          <Home
+            className={cn(
+              "w-6 h-6 font-medium ",
+              pathName === "/" && "text-white"
+            )}
+          />
         </Link>
         <Entry />
         {/* <button className=" rounded-full flex items-center justify-center p-2 ">
@@ -53,14 +61,14 @@ export function Footer({ session }: FooterProps) {
         <Link
           href="/transactions"
           className={cn(
-            "rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10",
+            "rounded-full hover:scale-110 transition-all duration-300 flex items-center shadow-md bg-white justify-center p-2 -mt-10 w-12 h-12",
             pathName === "/transactions" &&
               "bg-gradient-to-r from-violet-600 to-red-500"
           )}
         >
           <Receipt
             className={cn(
-              "w-8 h-8 font-medium ",
+              "w-6 h-6 ",
               pathName === "/transactions" && "text-white"
             )}
           />
