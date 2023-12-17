@@ -35,11 +35,7 @@ export async function getTransactionToday(userId: string) {
 }
 
 // TransactionWeek
-export async function getTransactionWeek(
-  userId: string,
-  start: Date,
-  end: Date
-) {
+export async function getTransactionWeek(userId: string) {
   const transaction = await prisma?.transaction.findMany({
     where: {
       userId,

@@ -18,11 +18,7 @@ export default async function Home() {
   if (!session) redirect("/signin")
   const transaction = await getTrasactionByUserId(session.user.id)
   const transactionToday = await getTransactionToday(session.user.id)
-  const transactionWeek = await getTransactionWeek(
-    session.user.id,
-    startOfWeek,
-    endOfWeek
-  )
+  const transactionWeek = await getTransactionWeek(session.user.id)
   const transactionMonth = await getTransactionMonth(session.user.id)
 
   return (

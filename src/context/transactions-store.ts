@@ -1,15 +1,8 @@
 import "@/lib/dayjs"
 import dayjs from "dayjs"
 import weekOfYear from "dayjs/plugin/weekOfYear"
-import { getSession } from "next-auth/react"
 import { create } from "zustand"
 dayjs.extend(weekOfYear)
-
-async function getSessionUser() {
-  const session = await getSession()
-  const userId = session?.user.id
-  return userId
-}
 
 type TransactionsStore = {
   totalAmountDay: number

@@ -97,6 +97,9 @@ export function Resume({
     currentWeekNumber,
   ])
 
+  const currentWeek = calendarWeeksOfYear[currentWeekNumber]
+  console.log(currentWeek)
+
   function handlePreviousWeek() {
     const previousWeekNumber = currentWeekNumber - 1
     setCurrentWeekNumber(previousWeekNumber)
@@ -154,11 +157,8 @@ export function Resume({
 
   // totalAmountMonth
   useEffect(() => {
-    console.log("useEffect triggered")
     const startOfMonth = currentDate.startOf("month")
     const endOfMonth = currentDate.endOf("month")
-    console.log("startOfMonth:", startOfMonth)
-    console.log("endOfMonth:", endOfMonth)
     const transactionsInMonth = transaction.filter((transaction) => {
       const transactionDate = dayjs(transaction.createdAt)
       return (
@@ -174,13 +174,8 @@ export function Resume({
         return acc - Number(transaction.amount)
       }
     }, 0)
-    console.log("total:", total)
     setTotalAmountMonth(total)
   }, [currentDate, transaction, setTotalAmountMonth, monthSelected])
-
-  useEffect(() => {
-    console.log("currentDate:", currentDate)
-  }, [currentDate])
 
   //
   const totalAmount = {
@@ -303,7 +298,19 @@ export function Resume({
           <button className="" onClick={handlePreviousWeek}>
             <ChevronLeft className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
           </button>
-          {/* <p>{currentWeekNumber}</p> */}
+          {currentWeekNumber === dayjs().week() ? (
+            ""
+          ) : (
+            <button
+              onClick={() => {
+                setCurrentDate(dayjs())
+                setCurrentWeekNumber(dayjs().week())
+              }}
+              className="px-4 py-1 border border-zinc-500 rounded-full text-xs"
+            >
+              Semana Atual
+            </button>
+          )}
           <button onClick={handleNextWeek}>
             <ChevronRight className="w-8 h-8 hover:text-zinc-800 text-zinc-700" />
           </button>
