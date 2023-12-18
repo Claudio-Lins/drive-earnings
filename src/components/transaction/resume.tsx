@@ -120,9 +120,9 @@ export function Resume({
     setCurrentDate(nextMonth)
   }
 
-  function getSelectedDate(dia: string, mes: string) {
+  function getSelectedDate(dia: string) {
     setDaySelected(dia)
-    setMonthSelected(mes)
+    // setMonthSelected(mes)
   }
 
   // Today
@@ -131,9 +131,7 @@ export function Resume({
   useEffect(() => {
     const todayIncome = transaction
       .filter((transaction) => {
-        return (
-          transaction.createdAt.toLocaleDateString().slice(0, 2) === daySelected
-        )
+        return dayjs(transaction.createdAt).format("DD-MM-YYYY") === daySelected
       })
       .filter((transaction) => transaction.type === "INCOME")
       .reduce((acc, transaction) => {
@@ -142,9 +140,7 @@ export function Resume({
 
     const todayExpense = transaction
       .filter((transaction) => {
-        return (
-          transaction.createdAt.toLocaleDateString().slice(0, 2) === daySelected
-        )
+        return dayjs(transaction.createdAt).format("DD-MM-YYYY") === daySelected
       })
       .filter((transaction) => transaction.type === "EXPENSE")
       .reduce((acc, transaction) => {
@@ -180,9 +176,15 @@ export function Resume({
   //
   const totalAmount = {
     todayIncome: transactionToday
+      .filter((transaction) => {
+        return dayjs(transaction.createdAt).format("DD-MM-YYYY") === daySelected
+      })
       .filter((transaction) => transaction.type === "INCOME")
       .reduce((acc, curr) => acc + Number(curr.amount), 0),
     todayExpense: transactionToday
+      .filter((transaction) => {
+        return dayjs(transaction.createdAt).format("DD-MM-YYYY") === daySelected
+      })
       .filter((transaction) => transaction.type === "EXPENSE")
       .reduce((acc, curr) => acc + Number(curr.amount), 0),
     weekIncome: transactionWeek
@@ -209,8 +211,8 @@ export function Resume({
     todayIncome,
     todayExpense,
   ])
-
-  const totalDaily = todayIncome - todayExpense
+  console.log("totalAmountDay", totalAmountDay)
+  // const totalDaily = todayIncome - todayExpense
   // const totalDailyWeek = totalAmount.weekIncome - totalAmount.weekExpense
   const totalDailyMonth = totalAmount.monthIncome - totalAmount.monthExpense
 
@@ -268,9 +270,7 @@ export function Resume({
                 animate={{ y: 0 }}
                 transition={{ duration: 1, delay: index * 0.1 }}
                 key={index}
-                onClick={() =>
-                  getSelectedDate(week.format("DD"), week.format("MMM"))
-                }
+                onClick={() => getSelectedDate(week.format("DD-MM-YYYY"))}
               >
                 <DayCard
                   className={cn(
@@ -305,6 +305,7 @@ export function Resume({
               onClick={() => {
                 setCurrentDate(dayjs())
                 setCurrentWeekNumber(dayjs().week())
+                getSelectedDate(dayjs().format("DD-MM-YYYY"))
               }}
               className="px-4 py-1 border border-zinc-500 rounded-full text-xs"
             >
@@ -326,12 +327,12 @@ export function Resume({
           <small>
             {daySelected === dayjs(currentDate).format("D")
               ? "Hoje"
-              : `${daySelected}/${monthSelected}`}
+              : `${daySelected.slice(0, 2)}/${daySelected.slice(3, 5)}`}
           </small>
           <span
             className={cn(
               "text-2xl lg:text-3xl font-bold",
-              totalDaily >= 0
+              totalAmountDay >= 0
                 ? "bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text "
                 : "text-red-500"
             )}
