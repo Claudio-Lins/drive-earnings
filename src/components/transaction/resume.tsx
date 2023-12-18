@@ -274,7 +274,7 @@ export function Resume({
               >
                 <DayCard
                   className={cn(
-                    daySelected === week.format("DD") &&
+                    daySelected === week.format("DD-MM-YYYY") &&
                       "border-2 border-red-500"
                   )}
                   active={
