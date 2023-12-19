@@ -1,16 +1,20 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
+import { DeleteButton, EditTransaction } from "@/utils/crud-transactions"
 import { ColumnDef } from "@tanstack/react-table"
 import dayjs from "dayjs"
-import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react"
+import { ArrowUpDown, Eye, PenBox, Trash2 } from "lucide-react"
 
 export type Transaction = {
   id: string
@@ -78,41 +82,161 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const transaction = row.original
 
-      async function handleDelete(id: string) {
-        await fetch(`/api/transaction`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id }),
-        })
-        window.location.reload()
-      }
-
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 flex items-center gap-1"
+        <div className="flex items-center pr-4 justify-end space-x-4 h-10">
+          <Dialog>
+            <DialogTrigger>
+              <Trash2 className="h-4 w-4 hover:text-zinc-900" />
+            </DialogTrigger>
+            <DialogOverlay style={{ backgroundColor: "#01010b" }} />
+            <DialogContent
+              className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
+              aria-label="delete"
             >
-              <span className="sr-only"></span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleDelete(transaction.id)}>
-              <div className="flex items-center gap-2 cursor-pointer">
-                <Trash2 className="h-4 w-4" />
-                <span>Delete</span>
+              <DialogHeader>
+                <DialogTitle>
+                  <h2 className="text-xl font-bold text-white">
+                    Tem certeza que deseja deletar a transação?
+                  </h2>
+                  <Separator className="mt-4" />
+                </DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <div className="w-full flex flex-col">
+                <div className="flex items-center justify-between w-full">
+                  <p className="text-white">
+                    <strong>Nome:</strong> {transaction.name}
+                  </p>
+                  <p className="font-bold text-3xl text-cyan-400">
+                    {new Intl.NumberFormat("pt-PT", {
+                      style: "currency",
+                      currency: "EUR",
+                    }).format(transaction.amount)}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p className="text-white">
+                    <strong>Tipo:</strong> {transaction.type}
+                  </p>
+                  <p className="text-white">
+                    <strong>Data:</strong>{" "}
+                    {dayjs(transaction.createdAt).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+                <Separator className="my-4" />
+                <div className="flex items-center space-x-4 justify-between">
+                  <DialogClose className="w-full">
+                    <Button variant="outline" className="w-full text-white">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                  <DeleteButton transaction={transaction} />
+                </div>
               </div>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger>
+              <PenBox className="h-4 w-4 hover:text-zinc-900" />
+            </DialogTrigger>
+            <DialogOverlay style={{ backgroundColor: "#01010b" }} />
+            <DialogContent
+              className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
+              aria-label="delete"
+            >
+              <DialogHeader>
+                <DialogTitle>
+                  <h2 className="text-xl font-bold text-white">
+                    Tem certeza que deseja deletar a transação?
+                  </h2>
+                  <Separator className="mt-4" />
+                </DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <div className="w-full flex flex-col">
+                <div className="flex items-center justify-between w-full">
+                  <p className="text-white">
+                    <strong>Nome:</strong> {transaction.name}
+                  </p>
+                  <p className="font-bold text-3xl text-cyan-400">
+                    {new Intl.NumberFormat("pt-PT", {
+                      style: "currency",
+                      currency: "EUR",
+                    }).format(transaction.amount)}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p className="text-white">
+                    <strong>Tipo:</strong> {transaction.type}
+                  </p>
+                  <p className="text-white">
+                    <strong>Data:</strong>{" "}
+                    {dayjs(transaction.createdAt).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+                <Separator className="my-4" />
+                <div className="flex items-center space-x-4 justify-between">
+                  <DialogClose className="w-full">
+                    <Button variant="outline" className="w-full text-white">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                  <EditTransaction transaction={transaction} />
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger>
+              <Eye className="h-4 w-4 hover:text-zinc-900" />
+            </DialogTrigger>
+            <DialogOverlay style={{ backgroundColor: "#01010b" }} />
+            <DialogContent
+              className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
+              aria-label="delete"
+            >
+              <DialogHeader>
+                <DialogTitle>
+                  <h2 className="text-xl font-bold text-white">
+                    Tem certeza que deseja deletar a transação?
+                  </h2>
+                  <Separator className="mt-4" />
+                </DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <div className="w-full flex flex-col">
+                <div className="flex items-center justify-between w-full">
+                  <p className="text-white">
+                    <strong>Nome:</strong> {transaction.name}
+                  </p>
+                  <p className="font-bold text-3xl text-cyan-400">
+                    {new Intl.NumberFormat("pt-PT", {
+                      style: "currency",
+                      currency: "EUR",
+                    }).format(transaction.amount)}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p className="text-white">
+                    <strong>Tipo:</strong> {transaction.type}
+                  </p>
+                  <p className="text-white">
+                    <strong>Data:</strong>{" "}
+                    {dayjs(transaction.createdAt).format("DD/MM/YYYY")}
+                  </p>
+                </div>
+                <Separator className="my-4" />
+                <div className="flex items-center space-x-4 justify-between">
+                  <DialogClose className="w-full">
+                    <Button variant="outline" className="w-full text-white">
+                      Fechar
+                    </Button>
+                  </DialogClose>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       )
     },
   },

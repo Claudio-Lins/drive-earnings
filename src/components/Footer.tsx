@@ -4,7 +4,6 @@
 // import { Category } from "@/@types"
 // import { UseAccountNav } from "./UseAccountNav"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
 import { Home, Receipt } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -25,12 +24,7 @@ export function Footer({ session }: FooterProps) {
         !session?.user && "hidden"
       )}
     >
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.5, delay: 3 }}
-        className="flex items-center justify-evenly px-2 gap-2 w-full max-w-md"
-      >
+      <div className="flex items-center justify-evenly px-2 gap-2 w-full max-w-md">
         <Link
           href="/"
           className={cn(
@@ -73,7 +67,7 @@ export function Footer({ session }: FooterProps) {
             )}
           />
         </Link>
-      </motion.div>
+      </div>
     </div>
   )
 }
