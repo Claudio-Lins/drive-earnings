@@ -1,4 +1,5 @@
 "use client"
+import { TransactionTypes } from "@/@types/transaction"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,23 +12,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
-import { DeleteButton, EditTransaction } from "@/utils/crud-transactions"
+import { DeleteButton } from "@/utils/crud-transactions"
+import { EditTransaction } from "@/utils/edit-transaction"
 import { ColumnDef } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { ArrowUpDown, Eye, PenBox, Trash2 } from "lucide-react"
 
-export type Transaction = {
-  id: string
-  name: string
-  categoryId: string | null
-  categoryName: string | null
-  type: string
-  paymentMethod: string | null
-  amount: number
-  createdAt: Date
-}
-
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<TransactionTypes>[] = [
   {
     accessorKey: "createdAt",
     header: ({ column }) => {
@@ -81,6 +72,13 @@ export const columns: ColumnDef<Transaction>[] = [
     id: "actions",
     cell: ({ row }) => {
       const transaction = row.original
+      const transactionWithRequiredFields = {
+        ...transaction,
+        entity: "yourEntityValue",
+        updatedAt: new Date(),
+        userId: "yourUserId",
+        paymentMethod: transaction.paymentMethod || "defaultPaymentMethod",
+      }
 
       return (
         <div className="flex items-center pr-4 justify-end space-x-4 h-10">
@@ -111,7 +109,7 @@ export const columns: ColumnDef<Transaction>[] = [
                     {new Intl.NumberFormat("pt-PT", {
                       style: "currency",
                       currency: "EUR",
-                    }).format(transaction.amount)}
+                    }).format(Number(transaction.amount))}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -130,7 +128,7 @@ export const columns: ColumnDef<Transaction>[] = [
                       Cancelar
                     </Button>
                   </DialogClose>
-                  <DeleteButton transaction={transaction} />
+                  <DeleteButton transaction={transactionWithRequiredFields} />
                 </div>
               </div>
             </DialogContent>
@@ -142,48 +140,9 @@ export const columns: ColumnDef<Transaction>[] = [
             <DialogOverlay style={{ backgroundColor: "#01010b" }} />
             <DialogContent
               className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
-              aria-label="delete"
+              aria-label="edit"
             >
-              <DialogHeader>
-                <DialogTitle>
-                  <h2 className="text-xl font-bold text-white">
-                    Tem certeza que deseja deletar a transação?
-                  </h2>
-                  <Separator className="mt-4" />
-                </DialogTitle>
-                <DialogDescription></DialogDescription>
-              </DialogHeader>
-              <div className="w-full flex flex-col">
-                <div className="flex items-center justify-between w-full">
-                  <p className="text-white">
-                    <strong>Nome:</strong> {transaction.name}
-                  </p>
-                  <p className="font-bold text-3xl text-cyan-400">
-                    {new Intl.NumberFormat("pt-PT", {
-                      style: "currency",
-                      currency: "EUR",
-                    }).format(transaction.amount)}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <p className="text-white">
-                    <strong>Tipo:</strong> {transaction.type}
-                  </p>
-                  <p className="text-white">
-                    <strong>Data:</strong>{" "}
-                    {dayjs(transaction.createdAt).format("DD/MM/YYYY")}
-                  </p>
-                </div>
-                <Separator className="my-4" />
-                <div className="flex items-center space-x-4 justify-between">
-                  <DialogClose className="w-full">
-                    <Button variant="outline" className="w-full text-white">
-                      Cancelar
-                    </Button>
-                  </DialogClose>
-                  <EditTransaction transaction={transaction} />
-                </div>
-              </div>
+              <EditTransaction transaction={transactionWithRequiredFields} />
             </DialogContent>
           </Dialog>
           <Dialog>
@@ -213,7 +172,7 @@ export const columns: ColumnDef<Transaction>[] = [
                     {new Intl.NumberFormat("pt-PT", {
                       style: "currency",
                       currency: "EUR",
-                    }).format(transaction.amount)}
+                    }).format(Number(transaction.amount))}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">

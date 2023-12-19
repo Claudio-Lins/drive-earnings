@@ -5,10 +5,12 @@ interface TogglePaymentMethodProps {
   setPaymentMethod: React.Dispatch<
     React.SetStateAction<"CASH" | "CREDIT" | "DEBIT">
   >
+  paymentMethod: "CASH" | "CREDIT" | "DEBIT"
 }
 
 export function TogglePaymentMethod({
   setPaymentMethod,
+  paymentMethod,
 }: TogglePaymentMethodProps) {
   const [isCash, setIsCash] = useState(false)
   const [isCredit, setIsCredit] = useState(false)
@@ -31,6 +33,16 @@ export function TogglePaymentMethod({
       setPaymentMethod("DEBIT")
     }
   }, [isDebit, setPaymentMethod])
+
+  useEffect(() => {
+    if (paymentMethod === "CASH") {
+      setIsCash(true)
+    } else if (paymentMethod === "CREDIT") {
+      setIsCredit(true)
+    } else if (paymentMethod === "DEBIT") {
+      setIsDebit(true)
+    }
+  }, [paymentMethod])
 
   return (
     <fieldset className="flex items-center gap-2">
