@@ -5,7 +5,7 @@ interface TogglePaymentMethodProps {
   setPaymentMethod: React.Dispatch<
     React.SetStateAction<"CASH" | "CREDIT" | "DEBIT">
   >
-  paymentMethod: "CASH" | "CREDIT" | "DEBIT"
+  paymentMethod?: "CASH" | "CREDIT" | "DEBIT"
 }
 
 export function TogglePaymentMethod({
