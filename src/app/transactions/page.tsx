@@ -1,11 +1,23 @@
+import { TransactionTypes } from "@/@types/transaction"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
-import { Transaction, columns } from "./columns"
+import { columns } from "./columns"
 import { DataTable } from "./data-table"
 
-async function getTransaction(userId: string): Promise<Transaction[]> {
+type Transaction = {
+  id: string
+  name: string
+  categoryId: string | null
+  categoryName: string | null
+  type: string
+  paymentMethod: string | null
+  amount: number
+  createdAt: Date
+}
+
+async function getTransaction(userId: string): Promise<TransactionTypes[]> {
   const transactions = await prisma.transaction.findMany({
     where: {
       userId: userId,
@@ -19,7 +31,7 @@ async function getTransaction(userId: string): Promise<Transaction[]> {
   })
   return transactions.map((transaction) => ({
     ...transaction,
-    amount: transaction.amount.toNumber(),
+    amount: transaction.amount.toNumber().toString(),
     categoryName: transaction.category ? transaction.category.name : null,
   }))
 }

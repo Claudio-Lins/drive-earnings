@@ -48,7 +48,7 @@ export function TogglePaymentMethod({
     <fieldset className="flex items-center gap-2">
       <legend className="sr-only">Cash</legend>
 
-      <div className="w-full max-w-xs md:max-w-[130px]">
+      <div className="w-full max-w-xs">
         <input
           type="radio"
           name="Cash"
@@ -78,7 +78,7 @@ export function TogglePaymentMethod({
         </label>
       </div>
 
-      <div className="w-full max-w-xs md:max-w-[130px]">
+      <div className="w-full max-w-xs">
         <input
           type="radio"
           name="Credit"
@@ -108,7 +108,7 @@ export function TogglePaymentMethod({
         </label>
       </div>
 
-      <div className="w-full max-w-xs md:max-w-[130px]">
+      <div className="w-full max-w-xs">
         <input
           type="radio"
           name="Debit"
