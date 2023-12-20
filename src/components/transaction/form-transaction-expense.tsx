@@ -25,8 +25,8 @@ import { ScrollArea } from "../ui/scroll-area"
 import { Separator } from "../ui/separator"
 import { ToastAction } from "../ui/toast"
 import { DatePicker } from "./date-picker"
+import { ToggleEntity } from "./toggle-entity"
 import { TogglePaymentMethod } from "./toggle-payment-method"
-import { TogglePersonalCompany } from "./toggle-personal-company"
 import { ToggleRecurrency } from "./toggle-recurrency"
 import { UploadRecive } from "./upload-recive"
 
@@ -285,7 +285,7 @@ export function FormTransactionExpense({
                       <Label className="w-full text-zinc-950" htmlFor="entity">
                         Tipo da transação
                       </Label>
-                      <TogglePersonalCompany setEntity={setEntity} />
+                      <ToggleEntity setEntity={setEntity} />
                     </div>
                     <div className="flex flex-col space-y-2">
                       <Label className="w-full text-zinc-950" htmlFor="entity">

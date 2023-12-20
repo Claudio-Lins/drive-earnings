@@ -1,6 +1,7 @@
 import { TransactionTypes } from "@/@types/transaction"
-import { ToggleIncomeExpense } from "@/components/category/toggle-income-expense"
+import { ToggleEntity } from "@/components/transaction/toggle-entity"
 import { TogglePaymentMethod } from "@/components/transaction/toggle-payment-method"
+import { ToggleTypeTransaction } from "@/components/transaction/toggle-type-transaction"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,7 +19,7 @@ const transactionEditFormSchema = z.object({
     .min(3, "O nome da transação deve ter no mínimo 3 caracteres"),
   type: z.enum(["INCOME", "EXPENSE"]),
   paymentMethod: z.enum(["CASH", "CREDIT", "DEBIT"]),
-  // entity: z.string(),
+  entity: z.string(),
   // recurring: z.string(),
   // location: z.string(),
   // notes: z.string(),
@@ -43,6 +44,10 @@ export function EditTransaction({
   const [paymentMethod, setPaymentMethod] = useState<
     "CASH" | "CREDIT" | "DEBIT"
   >(transaction.paymentMethod as "CASH" | "CREDIT" | "DEBIT")
+  const [entity, setEntity] = useState<"PERSON" | "COMPANY">(
+    transaction.entity as "PERSON" | "COMPANY"
+  )
+
   const {
     register,
     handleSubmit,
@@ -56,6 +61,7 @@ export function EditTransaction({
       amount: Number(transaction.amount),
       type: transaction.type as "INCOME" | "EXPENSE" | undefined,
       paymentMethod: transaction.paymentMethod as "CASH" | "CREDIT" | "DEBIT",
+      entity: transaction.entity as "PERSON" | "COMPANY",
       // categoryId: transaction.categoryId || "",
       // recurring: transaction.recurring || "",
       // location: transaction.location || "",
@@ -79,20 +85,18 @@ export function EditTransaction({
         id: transaction.id,
         type,
         paymentMethod,
+        entity,
       }),
     })
     setIsEditting(false)
+    console.log(entity)
     window.location.reload()
   }
 
-  return isEditting ? (
-    <div className=" inset-0 flex-col items-center justify-center bg-zinc-950">
-      <Loader className="text-white w-8 h-8 animate-spin" />
-    </div>
-  ) : (
+  return (
     <form
       onSubmit={handleSubmit(handleEdit)}
-      className="flex flex-col justify-between  mt-10"
+      className="flex flex-col justify-between"
     >
       <div className="flex flex-col space-y-6 flex-1">
         <div className="flex items-center gap-2">
@@ -134,7 +138,7 @@ export function EditTransaction({
             />
           </div>
         </div>
-        <ToggleIncomeExpense
+        <ToggleTypeTransaction
           setType={setType}
           type={transaction.type as "INCOME" | "EXPENSE"}
         />
@@ -144,14 +148,21 @@ export function EditTransaction({
             transaction.paymentMethod as "CASH" | "CREDIT" | "DEBIT"
           }
         />
+        <ToggleEntity
+          setEntity={setEntity}
+          entity={transaction.entity as "PERSON" | "COMPANY"}
+        />
       </div>
+      <p className="text-white">{transaction.entity}</p>
       <div className="mt-20">
         <Button
+          disabled={isSubmitting || isEditting}
           type="submit"
-          className="w-full bg-cyan-400 hover:bg-cyan-500"
+          className="w-full bg-cyan-400 hover:bg-cyan-500 flex items-center justify-center gap-2"
           variant="default"
         >
-          Editar
+          <span>Editar</span>
+          {isSubmitting && <Loader className="w-4 h-4 animate-spin" />}
         </Button>
       </div>
     </form>

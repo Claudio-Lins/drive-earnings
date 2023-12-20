@@ -74,9 +74,9 @@ export const columns: ColumnDef<TransactionTypes>[] = [
       const transaction = row.original
       const transactionWithRequiredFields = {
         ...transaction,
-        entity: "yourEntityValue",
+        entity: transaction.entity,
         updatedAt: new Date(),
-        userId: "yourUserId",
+        userId: transaction.userId,
         paymentMethod: transaction.paymentMethod || "defaultPaymentMethod",
       }
 
@@ -139,7 +139,7 @@ export const columns: ColumnDef<TransactionTypes>[] = [
             </DialogTrigger>
             <DialogOverlay style={{ backgroundColor: "#01010b" }} />
             <DialogContent
-              className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
+              className="bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
               aria-label="edit"
             >
               <EditTransaction transaction={transactionWithRequiredFields} />
@@ -164,26 +164,11 @@ export const columns: ColumnDef<TransactionTypes>[] = [
                 <DialogDescription></DialogDescription>
               </DialogHeader>
               <div className="w-full flex flex-col">
-                <div className="flex items-center justify-between w-full">
-                  <p className="text-white">
-                    <strong>Nome:</strong> {transaction.name}
-                  </p>
-                  <p className="font-bold text-3xl text-cyan-400">
-                    {new Intl.NumberFormat("pt-PT", {
-                      style: "currency",
-                      currency: "EUR",
-                    }).format(Number(transaction.amount))}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <p className="text-white">
-                    <strong>Tipo:</strong> {transaction.type}
-                  </p>
-                  <p className="text-white">
-                    <strong>Data:</strong>{" "}
-                    {dayjs(transaction.createdAt).format("DD/MM/YYYY")}
-                  </p>
-                </div>
+                <pre>
+                  <code className="text-white">
+                    {JSON.stringify(transaction, null, 2)}
+                  </code>
+                </pre>
                 <Separator className="my-4" />
                 <div className="flex items-center space-x-4 justify-between">
                   <DialogClose className="w-full">

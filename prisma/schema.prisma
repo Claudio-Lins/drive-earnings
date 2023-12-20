@@ -126,6 +126,7 @@ enum PaymentMethod {
 }
 
 enum Recurring {
+  NONE
   DAILY
   WEEKLY
   MONTHLY

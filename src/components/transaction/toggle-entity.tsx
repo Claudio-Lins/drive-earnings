@@ -1,82 +1,91 @@
 import { CheckCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 
-interface TogglePersonalCompanyProps {
-  setType: React.Dispatch<React.SetStateAction<"INCOME" | "EXPENSE">>
+interface ToggleEntityProps {
+  setEntity: React.Dispatch<React.SetStateAction<"PERSON" | "COMPANY">>
+  entity?: "PERSON" | "COMPANY"
 }
 
-export function TogglePersonalCompany({ setType }: TogglePersonalCompanyProps) {
-  const [isIncome, setIsIncome] = useState(false)
-  const [isExpense, setIsExpense] = useState(false)
+export function ToggleEntity({ setEntity, entity }: ToggleEntityProps) {
+  const [isPerson, setIsPerson] = useState(false)
+  const [isCompany, setIsCompany] = useState(false)
 
   useEffect(() => {
-    if (isIncome) {
-      setType("INCOME")
+    if (entity === "PERSON") {
+      setIsPerson(true)
+    } else {
+      setIsCompany(true)
     }
-  }, [isIncome, setType])
+  }, [entity])
 
   useEffect(() => {
-    if (isExpense) {
-      setType("EXPENSE")
+    if (isPerson) {
+      setEntity("PERSON")
     }
-  }, [isExpense, setType])
+  }, [isPerson, setEntity])
+
+  useEffect(() => {
+    if (isCompany) {
+      setEntity("COMPANY")
+    }
+  }, [isCompany, setEntity])
 
   return (
     <fieldset className="flex items-center gap-2">
-      <legend className="sr-only">Tipo de Entrada</legend>
+      <legend className="sr-only">Type entity</legend>
 
-      <div className="w-full max-w-xs md:max-w-[130px]">
+      <div className="w-full max-w-xs">
         <input
           type="radio"
-          name="INCOME"
-          value="INCOME"
-          id="INCOME"
+          name="PERSON"
+          value="PERSON"
+          id="PERSON"
           className="peer hidden [&:checked_+_label_svg]:block"
-          checked={isIncome}
+          checked={isPerson}
           onChange={() => {
-            setIsIncome(true)
-            setIsExpense(false)
+            setIsPerson(true)
+            setIsCompany(false)
           }}
         />
 
         <label
-          htmlFor="EXPENSE"
+          htmlFor="PERSON"
           className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-zinc-500 peer-checked:ring-1 peer-checked:ring-zinc-500 peer-checked:bg-zinc-950 peer-checked:text-zinc-50"
         >
           <div className="flex items-center justify-between">
             <p className="uppercase text-xs md:text-sm peer-checked:text-zinc-50">
-              Entrada
+              Pessoal
             </p>
-            {isIncome && (
+            {isPerson && (
               <CheckCircle className="h-4 w-4 md:h-5 md:w-5 text-zinc-50" />
             )}
           </div>
         </label>
       </div>
 
-      <div className="w-full max-w-xs md:max-w-[130px]">
+      <div className="w-full max-w-xs">
         <input
           type="radio"
-          name="EXPENSE"
-          value="EXPENSE"
-          id="EXPENSE"
+          name="COMPANY"
+          value="COMPANY"
+          id="COMPANY"
           className="peer hidden [&:checked_+_label_svg]:block"
-          checked={isExpense}
+          checked={isCompany}
           onChange={() => {
-            setIsExpense(true)
-            setIsIncome(false)
+            setIsCompany(true)
+            setIsPerson(false)
           }}
         />
 
         <label
-          htmlFor="EXPENSE"
+          htmlFor="COMPANY"
           className="block cursor-pointer rounded-lg border border-gray-100 bg-white p-2 text-sm font-medium shadow-sm hover:border-gray-200 peer-checked:border-zinc-500 peer-checked:ring-1 peer-checked:ring-zinc-500 peer-checked:bg-zinc-950 peer-checked:text-zinc-50"
         >
           <div className="flex items-center justify-between">
             <p className="uppercase text-xs md:text-sm peer-checked:text-zinc-50">
-              Saídas
+              Empresa
             </p>
-            {isExpense && (
+            {isCompany && (
               <CheckCircle className="h-4 w-4 md:h-5 md:w-5 text-zinc-50" />
             )}
           </div>
