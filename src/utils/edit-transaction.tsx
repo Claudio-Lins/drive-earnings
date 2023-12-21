@@ -153,7 +153,6 @@ export function EditTransaction({
           entity={transaction.entity as "PERSON" | "COMPANY"}
         />
       </div>
-      <p className="text-white">{transaction.entity}</p>
       <div className="mt-20">
         <Button
           disabled={isSubmitting || isEditting}

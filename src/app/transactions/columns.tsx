@@ -1,5 +1,6 @@
 "use client"
 import { TransactionTypes } from "@/@types/transaction"
+import { CardTransaction } from "@/components/transaction/card-transaction"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -88,7 +89,7 @@ export const columns: ColumnDef<TransactionTypes>[] = [
             </DialogTrigger>
             <DialogOverlay style={{ backgroundColor: "#01010b" }} />
             <DialogContent
-              className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
+              className="bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
               aria-label="delete"
             >
               <DialogHeader>
@@ -151,24 +152,26 @@ export const columns: ColumnDef<TransactionTypes>[] = [
             </DialogTrigger>
             <DialogOverlay style={{ backgroundColor: "#01010b" }} />
             <DialogContent
-              className="relative bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
-              aria-label="delete"
+              className="bg-gradient-to-r to-pink-950 from-zinc-950 rounded-lg shadow-xl"
+              aria-label="View Transaction"
             >
               <DialogHeader>
-                <DialogTitle>
-                  <h2 className="text-xl font-bold text-white">
-                    Tem certeza que deseja deletar a transação?
+                <DialogTitle className="flex items-center justify-between">
+                  <h2 className="text-zinc-50 font-bold text-xl">
+                    {transaction.name}
                   </h2>
-                  <Separator className="mt-4" />
+                  <p className="font-bold text-3xl text-cyan-400">
+                    {new Intl.NumberFormat("pt-PT", {
+                      style: "currency",
+                      currency: "EUR",
+                    }).format(Number(transaction.amount))}
+                  </p>
                 </DialogTitle>
+                <Separator className="mt-4" />
                 <DialogDescription></DialogDescription>
               </DialogHeader>
               <div className="w-full flex flex-col">
-                <pre>
-                  <code className="text-white">
-                    {JSON.stringify(transaction, null, 2)}
-                  </code>
-                </pre>
+                <CardTransaction transaction={transaction} />
                 <Separator className="my-4" />
                 <div className="flex items-center space-x-4 justify-between">
                   <DialogClose className="w-full">
